@@ -4,5 +4,5 @@ part 'failure.freezed.dart';
 
 @freezed
 class Failure with _$Failure {
-  const factory Failure.serverError() = ServerError;
+  const factory Failure({String? title, Object? error, StackTrace? stackTrace}) = GenericError;
 }

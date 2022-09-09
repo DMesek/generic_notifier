@@ -16,44 +16,19 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Failure {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() serverError,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? serverError,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? serverError,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerError value) serverError,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(ServerError value)? serverError,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerError value)? serverError,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
+  Object? get error => throw _privateConstructorUsedError;
+  StackTrace? get stackTrace => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $FailureCopyWith<Failure> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FailureCopyWith<$Res> {
   factory $FailureCopyWith(Failure value, $Res Function(Failure) then) =
       _$FailureCopyWithImpl<$Res>;
+  $Res call({String? title, Object? error, StackTrace? stackTrace});
 }
 
 /// @nodoc
@@ -63,102 +38,121 @@ class _$FailureCopyWithImpl<$Res> implements $FailureCopyWith<$Res> {
   final Failure _value;
   // ignore: unused_field
   final $Res Function(Failure) _then;
-}
-
-/// @nodoc
-abstract class _$$ServerErrorCopyWith<$Res> {
-  factory _$$ServerErrorCopyWith(
-          _$ServerError value, $Res Function(_$ServerError) then) =
-      __$$ServerErrorCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ServerErrorCopyWithImpl<$Res> extends _$FailureCopyWithImpl<$Res>
-    implements _$$ServerErrorCopyWith<$Res> {
-  __$$ServerErrorCopyWithImpl(
-      _$ServerError _value, $Res Function(_$ServerError) _then)
-      : super(_value, (v) => _then(v as _$ServerError));
 
   @override
-  _$ServerError get _value => super._value as _$ServerError;
+  $Res call({
+    Object? title = freezed,
+    Object? error = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(_value.copyWith(
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
+      error: error == freezed ? _value.error : error,
+      stackTrace: stackTrace == freezed
+          ? _value.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$GenericErrorCopyWith<$Res> implements $FailureCopyWith<$Res> {
+  factory _$$GenericErrorCopyWith(
+          _$GenericError value, $Res Function(_$GenericError) then) =
+      __$$GenericErrorCopyWithImpl<$Res>;
+  @override
+  $Res call({String? title, Object? error, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class __$$GenericErrorCopyWithImpl<$Res> extends _$FailureCopyWithImpl<$Res>
+    implements _$$GenericErrorCopyWith<$Res> {
+  __$$GenericErrorCopyWithImpl(
+      _$GenericError _value, $Res Function(_$GenericError) _then)
+      : super(_value, (v) => _then(v as _$GenericError));
+
+  @override
+  _$GenericError get _value => super._value as _$GenericError;
+
+  @override
+  $Res call({
+    Object? title = freezed,
+    Object? error = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(_$GenericError(
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String?,
+      error: error == freezed ? _value.error : error,
+      stackTrace: stackTrace == freezed
+          ? _value.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
 }
 
 /// @nodoc
 
-class _$ServerError implements ServerError {
-  const _$ServerError();
+class _$GenericError implements GenericError {
+  const _$GenericError({this.title, this.error, this.stackTrace});
+
+  @override
+  final String? title;
+  @override
+  final Object? error;
+  @override
+  final StackTrace? stackTrace;
 
   @override
   String toString() {
-    return 'Failure.serverError()';
+    return 'Failure(title: $title, error: $error, stackTrace: $stackTrace)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ServerError);
+        (other.runtimeType == runtimeType &&
+            other is _$GenericError &&
+            const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.stackTrace, stackTrace));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(stackTrace));
 
+  @JsonKey(ignore: true)
   @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() serverError,
-  }) {
-    return serverError();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? serverError,
-  }) {
-    return serverError?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? serverError,
-    required TResult orElse(),
-  }) {
-    if (serverError != null) {
-      return serverError();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerError value) serverError,
-  }) {
-    return serverError(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(ServerError value)? serverError,
-  }) {
-    return serverError?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerError value)? serverError,
-    required TResult orElse(),
-  }) {
-    if (serverError != null) {
-      return serverError(this);
-    }
-    return orElse();
-  }
+  _$$GenericErrorCopyWith<_$GenericError> get copyWith =>
+      __$$GenericErrorCopyWithImpl<_$GenericError>(this, _$identity);
 }
 
-abstract class ServerError implements Failure {
-  const factory ServerError() = _$ServerError;
+abstract class GenericError implements Failure {
+  const factory GenericError(
+      {final String? title,
+      final Object? error,
+      final StackTrace? stackTrace}) = _$GenericError;
+
+  @override
+  String? get title;
+  @override
+  Object? get error;
+  @override
+  StackTrace? get stackTrace;
+  @override
+  @JsonKey(ignore: true)
+  _$$GenericErrorCopyWith<_$GenericError> get copyWith =>
+      throw _privateConstructorUsedError;
 }

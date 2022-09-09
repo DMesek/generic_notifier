@@ -19,9 +19,12 @@ class BaseLoadingIndicator extends StatelessWidget {
         children: [
           const CircularProgressIndicator(),
           if (text != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(text ?? ""),
+            Material(
+              type: MaterialType.transparency,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(text ?? ""),
+              ),
             ),
         ],
       ),
