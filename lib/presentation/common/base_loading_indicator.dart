@@ -23,7 +23,7 @@ class BaseLoadingIndicator extends StatelessWidget {
               type: MaterialType.transparency,
               child: Padding(
                 padding: const EdgeInsets.only(top: 4),
-                child: Text(text ?? ""),
+                child: Text(text ?? ''),
               ),
             ),
         ],
