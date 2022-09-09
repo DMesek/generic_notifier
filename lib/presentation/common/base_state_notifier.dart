@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/failure.dart';
 import '../../domain/either_failure_or.dart';
+import '../../domain/failure.dart';
 import 'base_state.dart';
 
 typedef _PreHandleData<T> = bool Function(T data);
@@ -15,25 +15,24 @@ class BaseStateNotifier<DataState, OtherStates>
   @protected
   Future execute(
     EitherFailureOr<DataState> function, {
-    _PreHandleData<DataState>? onDataRecieved,
-    _PreHandleFailure? onFailureOccured,
+    _PreHandleData<DataState>? onDataReceived,
+    _PreHandleFailure? onFailureOccurred,
     bool withLoading = true,
   }) async {
     if (withLoading) state = const BaseState.loading();
-
     final either = await function;
     either.fold(
-      (failure) => _onFailure(failure, onFailureOccured),
-      (data) => _onData(data, onDataRecieved),
+      (failure) => _onFailure(failure, onFailureOccurred),
+      (data) => _onData(data, onDataReceived),
     );
   }
 
-  void _onFailure(Failure failure, _PreHandleFailure? onFailureOccured) {
-    if (onFailureOccured != null) {
-      final shouldUpdateState = onFailureOccured(failure);
-      if (shouldUpdateState) state = BaseState.errorOccured(failure);
+  void _onFailure(Failure failure, _PreHandleFailure? onFailureOccurred) {
+    if (onFailureOccurred != null) {
+      final shouldUpdateState = onFailureOccurred(failure);
+      if (shouldUpdateState) state = BaseState.errorOccurred(failure);
     } else {
-      state = BaseState.errorOccured(failure);
+      state = BaseState.errorOccurred(failure);
     }
   }
 

@@ -44,7 +44,7 @@ class ExamplePage extends ConsumerWidget {
                 errorOccured: (failure) => failure.toString(),
               ),
             ),
-            RaisedButton(
+            MaterialButton(
               onPressed: () =>
                   ref.read(exampleNotifierProvider.notifier).getSomeString(),
             ),

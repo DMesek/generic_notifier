@@ -16,10 +16,11 @@ class ExampleStateNotifier extends BaseStateNotifier<String, Object> {
   ExampleStateNotifier(this._exampleRepository);
 
   Future getSomeString() => execute(_exampleRepository.getSomeString());
+
   Future getSomeOtherString() => execute(
         _exampleRepository.getSomeOtherString(),
-        onDataRecieved: _updateOnlyWhenUppercaseFirst,
-        onFailureOccured: _emitOnlyServerError,
+        onDataReceived: _updateOnlyWhenUppercaseFirst,
+        onFailureOccurred: _emitOnlyServerError,
       );
 
   bool _updateOnlyWhenUppercaseFirst(String sentence) =>

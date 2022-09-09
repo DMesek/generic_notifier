@@ -8,5 +8,5 @@ class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
   const factory BaseState.data(State data) = _Data;
   const factory BaseState.loading() = _Loading;
   const factory BaseState.other(OtherStates otherStates) = _Other;
-  const factory BaseState.errorOccured(Failure failure) = _ErrorOccured;
+  const factory BaseState.errorOccurred(Failure failure) = _ErrorOccured;
 }
