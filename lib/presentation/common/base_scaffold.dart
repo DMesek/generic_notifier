@@ -22,7 +22,7 @@ class BaseScaffold extends ConsumerWidget {
       if (failure == null) return;
       log('showing failure with title ${failure.title}, error: ${failure.error} \nand stackTrace: ${failure.stackTrace}');
     });
-    final showLoading = ref.watch(loadingProvider);
+    final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
       children: [
         Scaffold(

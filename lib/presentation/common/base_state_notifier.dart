@@ -8,24 +8,21 @@ import 'base_state.dart';
 typedef PreHandleData<T> = bool Function(T data);
 typedef PreHandleFailure = bool Function(Failure failure);
 
-final loadingProvider = StateProvider<bool>((_) => false);
+final globalLoadingProvider = StateProvider<bool>((_) => false);
 final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
-abstract class BaseStateNotifier<DataState, OtherStates>
-    extends StateNotifier<BaseState<DataState, OtherStates>> {
+abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
   final Reader reader;
 
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
 
   @protected
-  Future execute(
-    EitherFailureOr<DataState> function, {
-    PreHandleData<DataState>? onDataReceived,
-    PreHandleFailure? onFailureOccurred,
-    bool withLoadingState = true,
-    bool globalLoading = false,
-    bool globalFailure = true
-  }) async {
+  Future execute(EitherFailureOr<DataState> function,
+      {PreHandleData<DataState>? onDataReceived,
+      PreHandleFailure? onFailureOccurred,
+      bool withLoadingState = true,
+      bool globalLoading = false,
+      bool globalFailure = true}) async {
     _setLoading(withLoadingState, globalLoading);
     final result = await function;
     result.fold(
@@ -35,28 +32,25 @@ abstract class BaseStateNotifier<DataState, OtherStates>
   }
 
   @protected
-  void showLoading() =>
-      reader(loadingProvider.notifier).update((state) => true);
+  void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
 
   @protected
-  void clearLoading({required bool withLoadingState}) {
-    if (withLoadingState) state = const BaseState.initial();
-    reader(loadingProvider.notifier).update((state) => false);
-  }
+  void clearGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => false);
 
-  void _setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
+  @protected
+  void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
 
   void _onFailure(Failure failure, PreHandleFailure? onFailureOccurred, bool withLoadingState, bool globalFailure) {
-    clearLoading(withLoadingState: withLoadingState);
-    _setGlobalFailure(null);
+    _unsetLoading(withLoadingState);
+    setGlobalFailure(null);
     final shouldProceedWithFailure = onFailureOccurred?.call(failure);
     if (shouldProceedWithFailure ?? true) {
-      globalFailure ? _setGlobalFailure(failure) : state = BaseState.error(failure);
+      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
     }
   }
 
   void _onData(DataState data, PreHandleData<DataState>? onDataReceived, bool withLoadingState) {
-    clearLoading(withLoadingState: withLoadingState);
+    _unsetLoading(withLoadingState);
     final shouldUpdateState = onDataReceived?.call(data);
     if (shouldUpdateState ?? true) state = BaseState.data(data);
   }
@@ -64,6 +58,11 @@ abstract class BaseStateNotifier<DataState, OtherStates>
   _setLoading(bool withLoadingState, bool globalLoading) {
     if (withLoadingState) state = const BaseState.loading();
     //Global loading
-    if (globalLoading) showLoading();
+    if (globalLoading) showGlobalLoading();
+  }
+
+  _unsetLoading(bool withLoadingState) {
+    if (withLoadingState) state = const BaseState.initial();
+    clearGlobalLoading();
   }
 }
