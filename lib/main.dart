@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/presentation/common/base_scaffold.dart';
 
 import 'presentation/example_state_notifier.dart';
 
@@ -30,8 +31,8 @@ class ExamplePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(exampleNotifierProvider);
-    return Scaffold(
-      body: Center(
+    return BaseScaffold(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +42,8 @@ class ExamplePage extends ConsumerWidget {
                 data: (sentence) => sentence,
                 loading: () => 'Loading',
                 other: (_) => 'Other',
-                errorOccured: (failure) => failure.toString(),
+                initial: () => 'Initial',
+                error: (failure) => failure.toString(),
               ),
             ),
             MaterialButton(
@@ -50,10 +52,6 @@ class ExamplePage extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            ref.read(exampleNotifierProvider.notifier).getSomeOtherString(),
       ),
     );
   }

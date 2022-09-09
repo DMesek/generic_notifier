@@ -7,20 +7,22 @@ import 'common/base_state_notifier.dart';
 
 final exampleNotifierProvider =
     StateNotifierProvider<ExampleStateNotifier, BaseState<String, Object>>(
-  (_) => ExampleStateNotifier(SentenceRepository()),
+  (ref) => ExampleStateNotifier(SentenceRepository(), ref),
 );
 
 class ExampleStateNotifier extends BaseStateNotifier<String, Object> {
   final ExampleRepository _exampleRepository;
 
-  ExampleStateNotifier(this._exampleRepository);
+  ExampleStateNotifier(this._exampleRepository, ref) : super(ref);
 
   Future getSomeString() => execute(_exampleRepository.getSomeString());
 
   Future getSomeOtherString() => execute(
         _exampleRepository.getSomeOtherString(),
-        onDataReceived: _updateOnlyWhenUppercaseFirst,
-        onFailureOccurred: _emitOnlyServerError,
+        // onDataReceived: _updateOnlyWhenUppercaseFirst,
+        // onFailureOccurred: _emitOnlyServerError,
+        globalLoading: false,
+        withLoading: true,
       );
 
   bool _updateOnlyWhenUppercaseFirst(String sentence) =>
