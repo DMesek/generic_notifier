@@ -22,15 +22,15 @@ abstract class BaseStateNotifier<DataState, OtherStates>
     EitherFailureOr<DataState> function, {
     PreHandleData<DataState>? onDataReceived,
     PreHandleFailure? onFailureOccurred,
-    bool withLoading = true,
+    bool withLoadingState = true,
     bool globalLoading = false,
     bool globalFailure = true
   }) async {
-    _setLoading(withLoading, globalLoading);
+    _setLoading(withLoadingState, globalLoading);
     final result = await function;
     result.fold(
-      (failure) => _onFailure(failure, onFailureOccurred, globalFailure),
-      (data) => _onData(data, onDataReceived),
+      (failure) => _onFailure(failure, onFailureOccurred, withLoadingState, globalFailure),
+      (data) => _onData(data, onDataReceived, withLoadingState),
     );
   }
 
@@ -39,13 +39,15 @@ abstract class BaseStateNotifier<DataState, OtherStates>
       reader(loadingProvider.notifier).update((state) => true);
 
   @protected
-  void clearLoading() =>
-      reader(loadingProvider.notifier).update((state) => false);
+  void clearLoading({required bool withLoadingState}) {
+    if (withLoadingState) state = const BaseState.initial();
+    reader(loadingProvider.notifier).update((state) => false);
+  }
 
   void _setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
 
-  void _onFailure(Failure failure, PreHandleFailure? onFailureOccurred, bool globalFailure) {
-    clearLoading();
+  void _onFailure(Failure failure, PreHandleFailure? onFailureOccurred, bool withLoadingState, bool globalFailure) {
+    clearLoading(withLoadingState: withLoadingState);
     _setGlobalFailure(null);
     final shouldProceedWithFailure = onFailureOccurred?.call(failure);
     if (shouldProceedWithFailure ?? true) {
@@ -53,14 +55,14 @@ abstract class BaseStateNotifier<DataState, OtherStates>
     }
   }
 
-  void _onData(DataState data, PreHandleData<DataState>? onDataReceived) {
-    clearLoading();
+  void _onData(DataState data, PreHandleData<DataState>? onDataReceived, bool withLoadingState) {
+    clearLoading(withLoadingState: withLoadingState);
     final shouldUpdateState = onDataReceived?.call(data);
     if (shouldUpdateState ?? true) state = BaseState.data(data);
   }
 
-  _setLoading(bool withLoading, bool globalLoading) {
-    if (withLoading) state = const BaseState.loading();
+  _setLoading(bool withLoadingState, bool globalLoading) {
+    if (withLoadingState) state = const BaseState.loading();
     //Global loading
     if (globalLoading) showLoading();
   }

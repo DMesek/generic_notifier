@@ -22,7 +22,7 @@ class ExampleStateNotifier extends BaseStateNotifier<String, Object> {
         // onDataReceived: _updateOnlyWhenUppercaseFirst,
         // onFailureOccurred: _emitOnlyServerError,
         globalLoading: true,
-        withLoading: true,
+        withLoadingState: true,
       );
 
   bool _updateOnlyWhenUppercaseFirst(String sentence) =>
