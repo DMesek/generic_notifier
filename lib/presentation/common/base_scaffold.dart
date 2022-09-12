@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/domain/navigation/app_navigation.dart';
 import 'package:reusability/presentation/common/base_loading_indicator.dart';
 import 'package:reusability/presentation/common/base_state_notifier.dart';
 import 'package:reusability/presentation/example_state_notifier.dart';
@@ -15,6 +16,7 @@ class BaseScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AppNavigation(ref, context).initAppNavigation();
     ref.globalFailureListener(context);
     final showLoading = ref.watch(globalLoadingProvider);
     return Stack(

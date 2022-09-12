@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/domain/either_failure_or.dart';
 import 'package:reusability/domain/failure.dart';
+import 'package:reusability/domain/notifiers/navigation_provider.dart';
+import 'package:reusability/domain/notifiers/navigation_state.dart';
 import 'package:reusability/presentation/common/base_state.dart';
 
 typedef PreHandleData<T> = bool Function(T data);
@@ -37,7 +39,12 @@ abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<B
     );
   }
 
-  @protected
+  void navigateToNamed(String route) =>
+      reader(navigationProvider.notifier).update((_) => NavigationState.routing(routeName: route));
+
+  void pop() => reader(navigationProvider.notifier)
+      .update((_) => const NavigationState.routing(routeFunction: RouteFunction.pop));
+
   void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
 
   @protected
@@ -72,7 +79,6 @@ abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<B
 
   _setLoading(bool withLoadingState, bool globalLoading) {
     if (withLoadingState) state = const BaseState.loading();
-    //Global loading
     if (globalLoading) showGlobalLoading();
   }
 
