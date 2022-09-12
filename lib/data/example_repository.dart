@@ -1,9 +1,8 @@
 import 'dart:math';
 
 import 'package:dartz/dartz.dart';
-
-import '../domain/either_failure_or.dart';
-import '../domain/failure.dart';
+import 'package:reusability/domain/either_failure_or.dart';
+import 'package:reusability/domain/failure.dart';
 
 abstract class ExampleRepository {
   EitherFailureOr<String> getSomeString();

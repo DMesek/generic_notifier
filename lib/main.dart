@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'presentation/example_page.dart';
+import 'package:reusability/custom_provider_observer.dart';
+import 'package:reusability/presentation/example_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
+      observers: [CustomProviderObserver()],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

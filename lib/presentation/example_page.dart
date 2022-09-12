@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'common/base_scaffold.dart';
-import 'example_state_notifier.dart';
+import 'package:reusability/presentation/common/base_scaffold.dart';
+import 'package:reusability/presentation/example_state_notifier.dart';
 
 class ExamplePage extends ConsumerWidget {
   const ExamplePage({Key? key}) : super(key: key);
@@ -26,8 +25,7 @@ class ExamplePage extends ConsumerWidget {
               ),
             ),
             MaterialButton(
-              onPressed: () =>
-                  ref.read(exampleNotifierProvider.notifier).getSomeString(),
+              onPressed: () => ref.read(exampleNotifierProvider.notifier).getSomeString(),
             ),
           ],
         ),

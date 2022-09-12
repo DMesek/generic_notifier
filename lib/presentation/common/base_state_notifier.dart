@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../domain/either_failure_or.dart';
-import '../../domain/failure.dart';
-import 'base_state.dart';
+import 'package:reusability/domain/either_failure_or.dart';
+import 'package:reusability/domain/failure.dart';
+import 'package:reusability/presentation/common/base_state.dart';
 
 typedef PreHandleData<T> = bool Function(T data);
 typedef PreHandleFailure = bool Function(Failure failure);
@@ -17,16 +16,23 @@ abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<B
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
 
   @protected
-  Future execute(EitherFailureOr<DataState> function,
-      {PreHandleData<DataState>? onDataReceived,
-      PreHandleFailure? onFailureOccurred,
-      bool withLoadingState = true,
-      bool globalLoading = false,
-      bool globalFailure = true}) async {
+  Future execute(
+    EitherFailureOr<DataState> function, {
+    PreHandleData<DataState>? onDataReceived,
+    PreHandleFailure? onFailureOccurred,
+    bool withLoadingState = true,
+    bool globalLoading = false,
+    bool globalFailure = true,
+  }) async {
     _setLoading(withLoadingState, globalLoading);
     final result = await function;
     result.fold(
-      (failure) => _onFailure(failure, onFailureOccurred, withLoadingState, globalFailure),
+      (failure) => _onFailure(
+        failure.copyWith(uniqueKey: UniqueKey()),
+        onFailureOccurred,
+        withLoadingState,
+        globalFailure,
+      ),
       (data) => _onData(data, onDataReceived, withLoadingState),
     );
   }
@@ -40,19 +46,28 @@ abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<B
   @protected
   void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
 
-  void _onFailure(Failure failure, PreHandleFailure? onFailureOccurred, bool withLoadingState, bool globalFailure) {
-    _unsetLoading(withLoadingState);
-    setGlobalFailure(null);
-    final shouldProceedWithFailure = onFailureOccurred?.call(failure);
-    if (shouldProceedWithFailure ?? true) {
+  void _onFailure(
+    Failure failure,
+    PreHandleFailure? onFailureOccurred,
+    bool withLoadingState,
+    bool globalFailure,
+  ) {
+    final shouldProceedWithFailure = onFailureOccurred?.call(failure) ?? true;
+    if (!shouldProceedWithFailure || globalFailure) {
+      _unsetLoading(withLoadingState);
+    }
+    if (shouldProceedWithFailure) {
       globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
     }
   }
 
   void _onData(DataState data, PreHandleData<DataState>? onDataReceived, bool withLoadingState) {
-    _unsetLoading(withLoadingState);
-    final shouldUpdateState = onDataReceived?.call(data);
-    if (shouldUpdateState ?? true) state = BaseState.data(data);
+    final shouldUpdateState = onDataReceived?.call(data) ?? true;
+    if (shouldUpdateState) {
+      state = BaseState.data(data);
+    } else {
+      _unsetLoading(withLoadingState);
+    }
   }
 
   _setLoading(bool withLoadingState, bool globalLoading) {

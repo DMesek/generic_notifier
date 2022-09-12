@@ -17,8 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$Failure {
   String? get title => throw _privateConstructorUsedError;
+  bool get isCritical => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
   StackTrace? get stackTrace => throw _privateConstructorUsedError;
+  UniqueKey? get uniqueKey => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FailureCopyWith<Failure> get copyWith => throw _privateConstructorUsedError;
@@ -28,7 +30,12 @@ mixin _$Failure {
 abstract class $FailureCopyWith<$Res> {
   factory $FailureCopyWith(Failure value, $Res Function(Failure) then) =
       _$FailureCopyWithImpl<$Res>;
-  $Res call({String? title, Object? error, StackTrace? stackTrace});
+  $Res call(
+      {String? title,
+      bool isCritical,
+      Object? error,
+      StackTrace? stackTrace,
+      UniqueKey? uniqueKey});
 }
 
 /// @nodoc
@@ -42,19 +49,29 @@ class _$FailureCopyWithImpl<$Res> implements $FailureCopyWith<$Res> {
   @override
   $Res call({
     Object? title = freezed,
+    Object? isCritical = freezed,
     Object? error = freezed,
     Object? stackTrace = freezed,
+    Object? uniqueKey = freezed,
   }) {
     return _then(_value.copyWith(
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      isCritical: isCritical == freezed
+          ? _value.isCritical
+          : isCritical // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: error == freezed ? _value.error : error,
       stackTrace: stackTrace == freezed
           ? _value.stackTrace
           : stackTrace // ignore: cast_nullable_to_non_nullable
               as StackTrace?,
+      uniqueKey: uniqueKey == freezed
+          ? _value.uniqueKey
+          : uniqueKey // ignore: cast_nullable_to_non_nullable
+              as UniqueKey?,
     ));
   }
 }
@@ -65,7 +82,12 @@ abstract class _$$GenericErrorCopyWith<$Res> implements $FailureCopyWith<$Res> {
           _$GenericError value, $Res Function(_$GenericError) then) =
       __$$GenericErrorCopyWithImpl<$Res>;
   @override
-  $Res call({String? title, Object? error, StackTrace? stackTrace});
+  $Res call(
+      {String? title,
+      bool isCritical,
+      Object? error,
+      StackTrace? stackTrace,
+      UniqueKey? uniqueKey});
 }
 
 /// @nodoc
@@ -81,19 +103,29 @@ class __$$GenericErrorCopyWithImpl<$Res> extends _$FailureCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = freezed,
+    Object? isCritical = freezed,
     Object? error = freezed,
     Object? stackTrace = freezed,
+    Object? uniqueKey = freezed,
   }) {
     return _then(_$GenericError(
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      isCritical: isCritical == freezed
+          ? _value.isCritical
+          : isCritical // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: error == freezed ? _value.error : error,
       stackTrace: stackTrace == freezed
           ? _value.stackTrace
           : stackTrace // ignore: cast_nullable_to_non_nullable
               as StackTrace?,
+      uniqueKey: uniqueKey == freezed
+          ? _value.uniqueKey
+          : uniqueKey // ignore: cast_nullable_to_non_nullable
+              as UniqueKey?,
     ));
   }
 }
@@ -101,18 +133,29 @@ class __$$GenericErrorCopyWithImpl<$Res> extends _$FailureCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GenericError implements GenericError {
-  const _$GenericError({this.title, this.error, this.stackTrace});
+  const _$GenericError(
+      {this.title = 'Unknown error occurred',
+      this.isCritical = false,
+      this.error,
+      this.stackTrace,
+      this.uniqueKey});
 
   @override
+  @JsonKey()
   final String? title;
+  @override
+  @JsonKey()
+  final bool isCritical;
   @override
   final Object? error;
   @override
   final StackTrace? stackTrace;
+  @override
+  final UniqueKey? uniqueKey;
 
   @override
   String toString() {
-    return 'Failure(title: $title, error: $error, stackTrace: $stackTrace)';
+    return 'Failure(title: $title, isCritical: $isCritical, error: $error, stackTrace: $stackTrace, uniqueKey: $uniqueKey)';
   }
 
   @override
@@ -121,17 +164,22 @@ class _$GenericError implements GenericError {
         (other.runtimeType == runtimeType &&
             other is _$GenericError &&
             const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality()
+                .equals(other.isCritical, isCritical) &&
             const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
-                .equals(other.stackTrace, stackTrace));
+                .equals(other.stackTrace, stackTrace) &&
+            const DeepCollectionEquality().equals(other.uniqueKey, uniqueKey));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(isCritical),
       const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(stackTrace));
+      const DeepCollectionEquality().hash(stackTrace),
+      const DeepCollectionEquality().hash(uniqueKey));
 
   @JsonKey(ignore: true)
   @override
@@ -142,15 +190,21 @@ class _$GenericError implements GenericError {
 abstract class GenericError implements Failure {
   const factory GenericError(
       {final String? title,
+      final bool isCritical,
       final Object? error,
-      final StackTrace? stackTrace}) = _$GenericError;
+      final StackTrace? stackTrace,
+      final UniqueKey? uniqueKey}) = _$GenericError;
 
   @override
   String? get title;
   @override
+  bool get isCritical;
+  @override
   Object? get error;
   @override
   StackTrace? get stackTrace;
+  @override
+  UniqueKey? get uniqueKey;
   @override
   @JsonKey(ignore: true)
   _$$GenericErrorCopyWith<_$GenericError> get copyWith =>
