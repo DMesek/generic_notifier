@@ -44,7 +44,8 @@ abstract class BaseStateNotifier<DataState, OtherStates>
       .update((_) => NavigationState.routing(routeName: route));
 
   void pop() => reader(navigationProvider.notifier).update(
-      (_) => const NavigationState.routing(routeFunction: RouteType.pop));
+        (_) => const NavigationState.routing(routeFunction: RouteType.pop),
+      );
 
   void showGlobalLoading() =>
       reader(globalLoadingProvider.notifier).update((state) => true);
@@ -74,8 +75,11 @@ abstract class BaseStateNotifier<DataState, OtherStates>
     }
   }
 
-  void _onData(DataState data, PreHandleData<DataState>? onDataReceived,
-      bool withLoadingState) {
+  void _onData(
+    DataState data,
+    PreHandleData<DataState>? onDataReceived,
+    bool withLoadingState,
+  ) {
     final shouldUpdateState = onDataReceived?.call(data) ?? true;
     if (shouldUpdateState) {
       state = BaseState.data(data);
