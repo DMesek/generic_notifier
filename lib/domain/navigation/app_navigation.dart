@@ -16,7 +16,7 @@ class AppNavigation {
       navigationProvider,
       (_, state) {
         state.whenOrNull(routing: (routeName, routeFunction) {
-          log("Routing to: $routeName");
+          log('Routing to: $routeName');
           routeFunction.routeAction(context, routeName: routeName);
           ref.read(navigationProvider.notifier).update(
                 (state) => const NavigationState.initial(),

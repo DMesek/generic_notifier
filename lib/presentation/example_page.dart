@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/main.dart';
-
-import 'common/base_scaffold.dart';
-import 'example_state_notifier.dart';
+import 'package:reusability/presentation/common/base_scaffold.dart';
+import 'package:reusability/presentation/example_state_notifier.dart';
 
 class ExamplePage extends ConsumerWidget {
   const ExamplePage({Key? key}) : super(key: key);
@@ -27,15 +26,12 @@ class ExamplePage extends ConsumerWidget {
               ),
             ),
             TextButton(
-              onPressed:
-                  ref.read(exampleNotifierProvider.notifier).getSomeString,
-              child: const Text("Get string"),
+              onPressed: ref.read(exampleNotifierProvider.notifier).getSomeString,
+              child: const Text('Get string'),
             ),
             TextButton(
-              onPressed: () => ref
-                  .read(exampleNotifierProvider.notifier)
-                  .navigateToNamed(secondRoute),
-              child: const Text("Navigate"),
+              onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(secondRoute),
+              child: const Text('Navigate'),
             ),
           ],
         ),
@@ -64,10 +60,8 @@ class SecondScreen extends ConsumerWidget {
             child: const Text('Go back!'),
           ),
           TextButton(
-            onPressed: () => ref
-                .read(exampleNotifierProvider.notifier)
-                .navigateToNamed(thirdRoute),
-            child: const Text("Navigate"),
+            onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(thirdRoute),
+            child: const Text('Navigate'),
           ),
         ],
       ),

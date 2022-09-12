@@ -20,7 +20,7 @@ extension RouteFunctionActions on RouteFunction {
   void routeAction(BuildContext context, {String? routeName}) {
     switch (this) {
       case RouteFunction.pushNamed:
-        context.pushNamed(routeName ?? "");
+        context.pushNamed(routeName ?? '');
         break;
       case RouteFunction.pop:
         context.pop();
