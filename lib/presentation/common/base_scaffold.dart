@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/common/domain/utils/widget_ref_extension.dart';
 import 'package:reusability/domain/navigation/app_navigation.dart';
 import 'package:reusability/presentation/common/base_loading_indicator.dart';
 import 'package:reusability/presentation/common/base_state_notifier.dart';
 import 'package:reusability/presentation/example_state_notifier.dart';
-import 'package:reusability/widget_ref_extension.dart';
 
 class BaseScaffold extends ConsumerWidget {
   final Widget child;

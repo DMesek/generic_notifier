@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/custom_provider_observer.dart';
+import 'package:reusability/main/custom_provider_observer.dart';
 import 'package:reusability/presentation/example_page.dart';
 
 void main() {

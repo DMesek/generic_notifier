@@ -95,11 +95,6 @@ dart_code_metrics:
     - prefer-correct-type-name:
         min-length: 3
         severity: error
-    - no-magic-number:
-        severity: warning
-        allowed: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 3]
-        exclude:
-          - test/**
 
     - always-remove-listener:
         severity: performance
@@ -122,8 +117,6 @@ dart_code_metrics:
         severity: style
     - prefer-trailing-comma:
         break-on: 4
-        severity: style
-    - prefer-extracting-callbacks:
         severity: style
 
     - avoid-non-null-assertion:
