@@ -8,64 +8,61 @@ import 'base_state.dart';
 typedef PreHandleData<T> = bool Function(T data);
 typedef PreHandleFailure = bool Function(Failure failure);
 
-final loadingProvider = StateProvider<bool>((_) => false);
+final globalLoadingProvider = StateProvider<bool>((_) => false);
+final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
-abstract class BaseStateNotifier<DataState, OtherStates>
-    extends StateNotifier<BaseState<DataState, OtherStates>> {
-  final Ref ref;
+abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
+  final Reader reader;
 
-  BaseStateNotifier(this.ref) : super(const BaseState.initial());
+  BaseStateNotifier(this.reader) : super(const BaseState.initial());
 
   @protected
-  Future execute(
-    EitherFailureOr<DataState> function, {
-    PreHandleData<DataState>? onDataReceived,
-    PreHandleFailure? onFailureOccurred,
-    bool withLoading = true,
-    bool globalLoading = false,
-  }) async {
-    _setLoading(withLoading, globalLoading);
+  Future execute(EitherFailureOr<DataState> function,
+      {PreHandleData<DataState>? onDataReceived,
+      PreHandleFailure? onFailureOccurred,
+      bool withLoadingState = true,
+      bool globalLoading = false,
+      bool globalFailure = true}) async {
+    _setLoading(withLoadingState, globalLoading);
     final result = await function;
     result.fold(
-      (failure) => _onFailure(failure, onFailureOccurred),
-      (data) => _onData(data, onDataReceived),
+      (failure) => _onFailure(failure, onFailureOccurred, withLoadingState, globalFailure),
+      (data) => _onData(data, onDataReceived, withLoadingState),
     );
   }
 
   @protected
-  void showLoading() =>
-      ref.read(loadingProvider.notifier).update((state) => true);
+  void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
 
   @protected
-  void clearLoading() =>
-      ref.read(loadingProvider.notifier).update((state) => false);
+  void clearGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => false);
 
-  void _onFailure(Failure failure, PreHandleFailure? onFailureOccurred) {
-    clearLoading();
-    if (onFailureOccurred != null) {
-      final shouldUpdateState = onFailureOccurred(failure);
-      if (shouldUpdateState) state = BaseState.error(failure);
-    } else {
-      state = BaseState.error(failure);
+  @protected
+  void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
+
+  void _onFailure(Failure failure, PreHandleFailure? onFailureOccurred, bool withLoadingState, bool globalFailure) {
+    _unsetLoading(withLoadingState);
+    setGlobalFailure(null);
+    final shouldProceedWithFailure = onFailureOccurred?.call(failure);
+    if (shouldProceedWithFailure ?? true) {
+      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
     }
   }
 
-  void _onData(DataState data, PreHandleData<DataState>? onDataReceived) {
-    print(data);
-    print(onDataReceived);
-    clearLoading();
-    if (onDataReceived != null) {
-      final shouldUpdateState = onDataReceived(data);
-      print(shouldUpdateState);
-      if (shouldUpdateState) state = BaseState.data(data);
-    } else {
-      state = BaseState.data(data);
-    }
+  void _onData(DataState data, PreHandleData<DataState>? onDataReceived, bool withLoadingState) {
+    _unsetLoading(withLoadingState);
+    final shouldUpdateState = onDataReceived?.call(data);
+    if (shouldUpdateState ?? true) state = BaseState.data(data);
   }
 
-  _setLoading(bool withLoading, bool globalLoading) {
-    if (withLoading) state = const BaseState.loading();
+  _setLoading(bool withLoadingState, bool globalLoading) {
+    if (withLoadingState) state = const BaseState.loading();
     //Global loading
-    if (globalLoading) showLoading();
+    if (globalLoading) showGlobalLoading();
+  }
+
+  _unsetLoading(bool withLoadingState) {
+    if (withLoadingState) state = const BaseState.initial();
+    clearGlobalLoading();
   }
 }

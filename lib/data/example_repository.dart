@@ -28,7 +28,7 @@ class SentenceRepository implements ExampleRepository {
     if (Random().nextBool()) {
       return const Right('some sentence');
     } else {
-      return const Left(Failure.serverError());
+      return const Left(Failure());
     }
   }
 }

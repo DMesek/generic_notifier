@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/presentation/common/base_loading_indicator.dart';
-import 'package:reusability/presentation/common/base_state_notifier.dart';
-import 'package:reusability/presentation/example_state_notifier.dart';
+
+import '../../domain/failure.dart';
+import '../example_state_notifier.dart';
+import 'base_loading_indicator.dart';
+import 'base_state_notifier.dart';
 
 class BaseScaffold extends ConsumerWidget {
   final Widget child;
@@ -14,14 +18,18 @@ class BaseScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showLoading = ref.watch(loadingProvider);
+    ref.listen<Failure?>(globalFailureProvider, (_, failure) {
+      if (failure == null) return;
+      log('showing failure with title ${failure.title}, error: ${failure.error} \nand stackTrace: ${failure.stackTrace}');
+    });
+    final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
       children: [
         Scaffold(
           body: child,
           floatingActionButton: FloatingActionButton(
             onPressed: () =>
-                ref.read(exampleNotifierProvider.notifier).getSomeOtherString(),
+                ref.read(exampleNotifierProvider.notifier).getSomeString(),
           ),
         ),
         if (showLoading) const BaseLoadingIndicator(),
