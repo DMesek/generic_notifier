@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/main.dart';
 
 import 'common/base_scaffold.dart';
 import 'example_state_notifier.dart';
@@ -25,12 +26,75 @@ class ExamplePage extends ConsumerWidget {
                 error: (failure) => failure.toString(),
               ),
             ),
-            MaterialButton(
-              onPressed: () =>
-                  ref.read(exampleNotifierProvider.notifier).getSomeString(),
+            TextButton(
+              onPressed:
+                  ref.read(exampleNotifierProvider.notifier).getSomeString,
+              child: const Text("Get string"),
+            ),
+            TextButton(
+              onPressed: () => ref
+                  .read(exampleNotifierProvider.notifier)
+                  .navigateToNamed(secondRoute),
+              child: const Text("Navigate"),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends ConsumerWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ElevatedButton(
+            // Within the SecondScreen widget
+            onPressed: () {
+              // Navigate back to the first screen by popping the current route
+              // off the stack.
+              ref.read(exampleNotifierProvider.notifier).pop();
+            },
+            child: const Text('Go back!'),
+          ),
+          TextButton(
+            onPressed: () => ref
+                .read(exampleNotifierProvider.notifier)
+                .navigateToNamed(thirdRoute),
+            child: const Text("Navigate"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Screen3 extends ConsumerWidget {
+  const Screen3({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ElevatedButton(
+            // Within the SecondScreen widget
+            onPressed: () {
+              // Navigate back to the first screen by popping the current route
+              // off the stack.
+              ref.read(exampleNotifierProvider.notifier).pop();
+            },
+            child: const Text('Go back!'),
+          ),
+        ],
       ),
     );
   }

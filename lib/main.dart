@@ -7,6 +7,9 @@ void main() {
   runApp(const MyApp());
 }
 
+const secondRoute = "/second";
+const thirdRoute = "/third";
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -15,10 +18,13 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const ExamplePage(),
+        theme: ThemeData(primarySwatch: Colors.blue),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const ExamplePage(),
+          secondRoute: (context) => const SecondScreen(),
+          thirdRoute: (context) => const Screen3(),
+        },
       ),
     );
   }

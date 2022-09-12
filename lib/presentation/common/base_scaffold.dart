@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/domain/navigation/app_navigation.dart';
 
 import '../../domain/failure.dart';
 import '../example_state_notifier.dart';
@@ -18,6 +19,7 @@ class BaseScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AppNavigation(ref, context).initAppNavigation();
     ref.listen<Failure?>(globalFailureProvider, (_, failure) {
       if (failure == null) return;
       log('showing failure with title ${failure.title}, error: ${failure.error} \nand stackTrace: ${failure.stackTrace}');
