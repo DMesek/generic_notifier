@@ -12,7 +12,8 @@ typedef PreHandleFailure = bool Function(Failure failure);
 final globalLoadingProvider = StateProvider<bool>((_) => false);
 final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
-abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
+abstract class BaseStateNotifier<DataState, OtherStates>
+    extends StateNotifier<BaseState<DataState, OtherStates>> {
   final Reader reader;
 
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
@@ -39,19 +40,22 @@ abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<B
     );
   }
 
-  void navigateToNamed(String route) =>
-      reader(navigationProvider.notifier).update((_) => NavigationState.routing(routeName: route));
+  void navigateToNamed(String route) => reader(navigationProvider.notifier)
+      .update((_) => NavigationState.routing(routeName: route));
 
-  void pop() => reader(navigationProvider.notifier)
-      .update((_) => const NavigationState.routing(routeFunction: RouteFunction.pop));
+  void pop() => reader(navigationProvider.notifier).update(
+      (_) => const NavigationState.routing(routeFunction: RouteType.pop));
 
-  void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
-
-  @protected
-  void clearGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => false);
+  void showGlobalLoading() =>
+      reader(globalLoadingProvider.notifier).update((state) => true);
 
   @protected
-  void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
+  void clearGlobalLoading() =>
+      reader(globalLoadingProvider.notifier).update((state) => false);
+
+  @protected
+  void setGlobalFailure(Failure? failure) =>
+      reader(globalFailureProvider.notifier).update((state) => failure);
 
   void _onFailure(
     Failure failure,
@@ -64,11 +68,14 @@ abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<B
       _unsetLoading(withLoadingState);
     }
     if (shouldProceedWithFailure) {
-      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
+      globalFailure
+          ? setGlobalFailure(failure)
+          : state = BaseState.error(failure);
     }
   }
 
-  void _onData(DataState data, PreHandleData<DataState>? onDataReceived, bool withLoadingState) {
+  void _onData(DataState data, PreHandleData<DataState>? onDataReceived,
+      bool withLoadingState) {
     final shouldUpdateState = onDataReceived?.call(data) ?? true;
     if (shouldUpdateState) {
       state = BaseState.data(data);

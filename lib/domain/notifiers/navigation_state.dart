@@ -10,19 +10,19 @@ class NavigationState with _$NavigationState {
 
   const factory NavigationState.routing({
     String? routeName,
-    @Default(RouteFunction.pushNamed) RouteFunction routeFunction,
+    @Default(RouteType.pushNamed) RouteType routeFunction,
   }) = _Routing;
 }
 
-enum RouteFunction { pushNamed, pop }
+enum RouteType { pushNamed, pop }
 
-extension RouteFunctionActions on RouteFunction {
+extension RouteTypeActions on RouteType {
   void routeAction(BuildContext context, {String? routeName}) {
     switch (this) {
-      case RouteFunction.pushNamed:
+      case RouteType.pushNamed:
         context.pushNamed(routeName ?? '');
         break;
-      case RouteFunction.pop:
+      case RouteType.pop:
         context.pop();
         break;
     }

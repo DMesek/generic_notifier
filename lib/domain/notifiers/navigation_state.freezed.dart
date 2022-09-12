@@ -19,20 +19,20 @@ mixin _$NavigationState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String? routeName, RouteFunction routeFunction)
+    required TResult Function(String? routeName, RouteType routeFunction)
         routing,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String? routeName, RouteFunction routeFunction)? routing,
+    TResult Function(String? routeName, RouteType routeFunction)? routing,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String? routeName, RouteFunction routeFunction)? routing,
+    TResult Function(String? routeName, RouteType routeFunction)? routing,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -114,7 +114,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String? routeName, RouteFunction routeFunction)
+    required TResult Function(String? routeName, RouteType routeFunction)
         routing,
   }) {
     return initial();
@@ -124,7 +124,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String? routeName, RouteFunction routeFunction)? routing,
+    TResult Function(String? routeName, RouteType routeFunction)? routing,
   }) {
     return initial?.call();
   }
@@ -133,7 +133,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String? routeName, RouteFunction routeFunction)? routing,
+    TResult Function(String? routeName, RouteType routeFunction)? routing,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -183,7 +183,7 @@ abstract class _$$_RoutingCopyWith<$Res> {
   factory _$$_RoutingCopyWith(
           _$_Routing value, $Res Function(_$_Routing) then) =
       __$$_RoutingCopyWithImpl<$Res>;
-  $Res call({String? routeName, RouteFunction routeFunction});
+  $Res call({String? routeName, RouteType routeFunction});
 }
 
 /// @nodoc
@@ -208,7 +208,7 @@ class __$$_RoutingCopyWithImpl<$Res> extends _$NavigationStateCopyWithImpl<$Res>
       routeFunction: routeFunction == freezed
           ? _value.routeFunction
           : routeFunction // ignore: cast_nullable_to_non_nullable
-              as RouteFunction,
+              as RouteType,
     ));
   }
 }
@@ -216,14 +216,13 @@ class __$$_RoutingCopyWithImpl<$Res> extends _$NavigationStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Routing implements _Routing {
-  const _$_Routing(
-      {this.routeName, this.routeFunction = RouteFunction.pushNamed});
+  const _$_Routing({this.routeName, this.routeFunction = RouteType.pushNamed});
 
   @override
   final String? routeName;
   @override
   @JsonKey()
-  final RouteFunction routeFunction;
+  final RouteType routeFunction;
 
   @override
   String toString() {
@@ -255,7 +254,7 @@ class _$_Routing implements _Routing {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String? routeName, RouteFunction routeFunction)
+    required TResult Function(String? routeName, RouteType routeFunction)
         routing,
   }) {
     return routing(routeName, routeFunction);
@@ -265,7 +264,7 @@ class _$_Routing implements _Routing {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String? routeName, RouteFunction routeFunction)? routing,
+    TResult Function(String? routeName, RouteType routeFunction)? routing,
   }) {
     return routing?.call(routeName, routeFunction);
   }
@@ -274,7 +273,7 @@ class _$_Routing implements _Routing {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String? routeName, RouteFunction routeFunction)? routing,
+    TResult Function(String? routeName, RouteType routeFunction)? routing,
     required TResult orElse(),
   }) {
     if (routing != null) {
@@ -317,11 +316,10 @@ class _$_Routing implements _Routing {
 
 abstract class _Routing implements NavigationState {
   const factory _Routing(
-      {final String? routeName,
-      final RouteFunction routeFunction}) = _$_Routing;
+      {final String? routeName, final RouteType routeFunction}) = _$_Routing;
 
   String? get routeName;
-  RouteFunction get routeFunction;
+  RouteType get routeFunction;
   @JsonKey(ignore: true)
   _$$_RoutingCopyWith<_$_Routing> get copyWith =>
       throw _privateConstructorUsedError;

@@ -52,11 +52,7 @@ class SecondScreen extends ConsumerWidget {
         children: [
           ElevatedButton(
             // Within the SecondScreen widget
-            onPressed: () {
-              // Navigate back to the first screen by popping the current route
-              // off the stack.
-              ref.read(exampleNotifierProvider.notifier).pop();
-            },
+            onPressed: ref.read(exampleNotifierProvider.notifier).pop,
             child: const Text('Go back!'),
           ),
           TextButton(
