@@ -20,7 +20,6 @@ class BaseScaffold extends ConsumerWidget {
     ref.globalFailureListener(context);
     ref.globalNavigationListener();
     ref.read(beamerDelegateProvider.notifier).update((state) => Beamer.of(context));
-    //ref.read(goRouterDelegateProvider.notifier).update((state) => GoRouter.of(context));
     final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
       children: [
