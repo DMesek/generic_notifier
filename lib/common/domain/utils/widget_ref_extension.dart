@@ -22,11 +22,3 @@ extension WidgetRefExtension on WidgetRef {
     );
   }
 }
-
-// state.whenOrNull(routing: (routeName, routeFunction) {
-//   log('Routing to: $routeName');
-//   routeFunction.execute(context, routeName: routeName);
-//   read(navigationProvider.notifier).update(
-//     (state) => const NavigationState.initial(),
-//   );
-// });
