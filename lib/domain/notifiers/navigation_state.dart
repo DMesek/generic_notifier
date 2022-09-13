@@ -1,4 +1,4 @@
-import 'package:build_context/build_context.dart';
+import 'package:beamer/beamer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -20,10 +20,10 @@ extension RouteTypeActions on RouteType {
   void routeAction(BuildContext context, {String? routeName}) {
     switch (this) {
       case RouteType.pushNamed:
-        context.pushNamed(routeName ?? '');
+        context.beamToNamed(routeName ?? '');
         break;
       case RouteType.pop:
-        context.pop();
+        context.beamBack();
         break;
     }
   }

@@ -6,11 +6,11 @@ import 'package:reusability/presentation/common/base_state_notifier.dart';
 import 'package:reusability/presentation/example_state_notifier.dart';
 
 class BaseScaffold extends ConsumerWidget {
-  final Widget child;
+  final Widget? child;
 
   const BaseScaffold({
     Key? key,
-    required this.child,
+    this.child,
   }) : super(key: key);
 
   @override
@@ -23,8 +23,7 @@ class BaseScaffold extends ConsumerWidget {
         Scaffold(
           body: child,
           floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                ref.read(exampleNotifierProvider.notifier).getSomeString(),
+            onPressed: () => ref.read(exampleNotifierProvider.notifier).getSomeString(),
           ),
         ),
         if (showLoading) const BaseLoadingIndicator(),
