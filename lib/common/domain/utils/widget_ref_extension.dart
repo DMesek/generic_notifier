@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/domain/failure.dart';
 import 'package:reusability/domain/notifiers/navigation_provider.dart';
-import 'package:reusability/domain/notifiers/navigation_state.dart';
+import 'package:reusability/domain/notifiers/route_action.dart';
 import 'package:reusability/presentation/common/base_state_notifier.dart';
 
 extension WidgetRefExtension on WidgetRef {
@@ -16,17 +16,17 @@ extension WidgetRefExtension on WidgetRef {
   }
 
   void globalNavigationListener(BuildContext context) {
-    listen<NavigationState>(
+    listen<RouteAction?>(
       navigationProvider,
-      (_, state) {
-        state.whenOrNull(routing: (routeName, routeFunction) {
-          log('Routing to: $routeName');
-          routeFunction.routeAction(context, routeName: routeName);
-          read(navigationProvider.notifier).update(
-            (state) => const NavigationState.initial(),
-          );
-        });
-      },
+      (_, state) => state?.execute(context),
     );
   }
 }
+
+// state.whenOrNull(routing: (routeName, routeFunction) {
+//   log('Routing to: $routeName');
+//   routeFunction.execute(context, routeName: routeName);
+//   read(navigationProvider.notifier).update(
+//     (state) => const NavigationState.initial(),
+//   );
+// });
