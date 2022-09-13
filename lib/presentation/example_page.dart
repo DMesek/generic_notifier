@@ -9,29 +9,31 @@ class ExamplePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(exampleNotifierProvider);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            state.when(
-              data: (sentence) => sentence,
-              loading: () => 'Loading',
-              other: (_) => 'Other',
-              initial: () => 'Initial',
-              error: (failure) => failure.toString(),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              state.when(
+                data: (sentence) => sentence,
+                loading: () => 'Loading',
+                other: (_) => 'Other',
+                initial: () => 'Initial',
+                error: (failure) => failure.toString(),
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: ref.read(exampleNotifierProvider.notifier).getSomeString,
-            child: const Text('Get string'),
-          ),
-          TextButton(
-            onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(secondRoute),
-            child: const Text('Navigate'),
-          ),
-        ],
+            TextButton(
+              onPressed: ref.read(exampleNotifierProvider.notifier).getSomeString,
+              child: const Text('Get string'),
+            ),
+            TextButton(
+              onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(secondRoute),
+              child: const Text('Navigate'),
+            ),
+          ],
+        ),
       ),
     );
   }

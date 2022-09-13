@@ -661,8 +661,6 @@ abstract class _$$_ErrorCopyWith<State, OtherStates, $Res> {
           $Res Function(_$_Error<State, OtherStates>) then) =
       __$$_ErrorCopyWithImpl<State, OtherStates, $Res>;
   $Res call({Failure failure});
-
-  $FailureCopyWith<$Res> get failure;
 }
 
 /// @nodoc
@@ -687,13 +685,6 @@ class __$$_ErrorCopyWithImpl<State, OtherStates, $Res>
           : failure // ignore: cast_nullable_to_non_nullable
               as Failure,
     ));
-  }
-
-  @override
-  $FailureCopyWith<$Res> get failure {
-    return $FailureCopyWith<$Res>(_value.failure, (value) {
-      return _then(_value.copyWith(failure: value));
-    });
   }
 }
 

@@ -12,8 +12,7 @@ typedef PreHandleFailure = bool Function(Failure failure);
 final globalLoadingProvider = StateProvider<bool>((_) => false);
 final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
-abstract class BaseStateNotifier<DataState, OtherStates>
-    extends StateNotifier<BaseState<DataState, OtherStates>> {
+abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
   final Reader reader;
 
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
@@ -40,22 +39,18 @@ abstract class BaseStateNotifier<DataState, OtherStates>
     );
   }
 
-  void navigateToNamed(String routeName) => reader(navigationProvider.notifier)
-      .update((_) => RouteActionPushedNamed(routeName));
+  void navigateToNamed(String routeName) =>
+      reader(navigationProvider.notifier).update((_) => RouteActionPushNamed(routeName));
 
-  void pop() =>
-      reader(navigationProvider.notifier).update((_) => RouteActionPop());
+  void pop() => reader(navigationProvider.notifier).update((_) => RouteActionPop());
 
-  void showGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => true);
+  void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
 
   @protected
-  void clearGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => false);
+  void clearGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => false);
 
   @protected
-  void setGlobalFailure(Failure? failure) =>
-      reader(globalFailureProvider.notifier).update((state) => failure);
+  void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
 
   void _onFailure(
     Failure failure,
@@ -68,9 +63,7 @@ abstract class BaseStateNotifier<DataState, OtherStates>
       _unsetLoading(withLoadingState);
     }
     if (shouldProceedWithFailure) {
-      globalFailure
-          ? setGlobalFailure(failure)
-          : state = BaseState.error(failure);
+      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
     }
   }
 

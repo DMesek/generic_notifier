@@ -1,79 +1,72 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:reusability/app_router.dart';
+import 'package:reusability/common/domain/router/beamer_locations.dart';
 import 'package:reusability/main/custom_provider_observer.dart';
 import 'package:reusability/presentation/common/base_scaffold.dart';
 import 'package:reusability/presentation/example_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(observers: [CustomProviderObserver()], child: MyApp()));
 }
+
+final goRouterDelegateProvider = StateProvider<GoRouter?>((ref) {
+  return null;
+});
 
 const secondRoute = '/second';
 const thirdRoute = '/third';
 
-class MyApp extends StatelessWidget {
-  final _routerDelegate = BeamerDelegate(
+class MyApp extends ConsumerWidget {
+  final routerDelegate = BeamerDelegate(
     initialPath: '/',
     locationBuilder: (routeInformation, _) => BeamerLocations(routeInformation),
+  );
+
+  final GoRouter _router = GoRouter(
+    routes: <GoRoute>[
+      GoRoute(
+        path: '/',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ExamplePage();
+        },
+      ),
+      GoRoute(
+        path: secondRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SecondScreen();
+        },
+      ),
+      GoRoute(
+        path: thirdRoute,
+        builder: (BuildContext context, GoRouterState state) {
+          return const Screen3();
+        },
+      ),
+    ],
   );
 
   MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ProviderScope(
-      observers: [CustomProviderObserver()],
-      child: BeamerProvider(
-        routerDelegate: _routerDelegate,
-        child: MaterialApp.router(
-          title: 'Flutter Demo',
-          theme: ThemeData(primarySwatch: Colors.blue),
-          routeInformationParser: BeamerParser(),
-          routerDelegate: _routerDelegate,
-          // initialRoute: '/',
-          // routes: {
-          //   '/': (context) => const ExamplePage(),
-          //   secondRoute: (context) => const SecondScreen(),
-          //   thirdRoute: (context) => const Screen3(),
-          // },
-          builder: (context, child) => BaseScaffold(child: child),
-        ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appRouter = ref.read(appRouterProvider);
+    return BeamerProvider(
+      routerDelegate: routerDelegate,
+      child: MaterialApp.router(
+        title: 'Flutter Demo',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        // routerDelegate: _router.routerDelegate,
+        // routeInformationParser: _router.routeInformationParser,
+        // routeInformationProvider: _router.routeInformationProvider,
+        routerDelegate: routerDelegate,
+        routeInformationParser: BeamerParser(),
+        // routerDelegate: appRouter?.delegate(),
+        // routeInformationParser: appRouter?.defaultRouteParser(),
+        builder: (context, child) => BaseScaffold(child: child ?? const SizedBox()),
       ),
     );
-  }
-}
-
-class BeamerLocations extends BeamLocation<BeamState> {
-  BeamerLocations(RouteInformation routeInformation) : super(routeInformation);
-
-  @override
-  List<Pattern> get pathPatterns => [
-        '/',
-        secondRoute,
-        thirdRoute,
-      ];
-
-  @override
-  List<BeamPage> buildPages(BuildContext context, BeamState state) {
-    return [
-      const BeamPage(
-        key: ValueKey('example'),
-        title: 'Example',
-        child: ExamplePage(),
-      ),
-      if (state.uri.pathSegments.contains('second'))
-        const BeamPage(
-          key: ValueKey('SecondScreen'),
-          title: 'SecondScreen',
-          child: SecondScreen(),
-        ),
-      if (state.uri.pathSegments.contains('third'))
-        const BeamPage(
-          key: ValueKey('Screen3'),
-          title: 'Screen3',
-          child: Screen3(),
-        ),
-    ];
   }
 }

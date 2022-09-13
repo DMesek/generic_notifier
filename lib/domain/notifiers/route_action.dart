@@ -1,36 +1,28 @@
-import 'package:beamer/beamer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/common/domain/router/beamer_delegate_provider.dart';
 
 abstract class RouteAction {
-  void execute(BuildContext context);
-}
-
-abstract class RouteName {
-  final String routeName = '';
-}
-
-class RouteActionPushedNamed implements RouteAction, RouteName {
-  @override
   final String routeName;
+  RouteAction([this.routeName = '']);
 
-  RouteActionPushedNamed(this.routeName);
-
-  @override
-  void execute(BuildContext context) => context.beamToNamed(routeName);
+  void execute(Reader reader);
 }
 
-class RouteActionPop implements RouteAction {
+class RouteActionPushNamed extends RouteAction {
+  RouteActionPushNamed(super.routeName);
+
   @override
-  void execute(BuildContext context) => context.beamBack();
+  void execute(Reader reader) => reader(beamerDelegateProvider)?.beamToNamed(routeName);
 }
 
-class RouteActionPushedReplacement implements RouteAction, RouteName {
+class RouteActionPop extends RouteAction {
   @override
-  final String routeName;
+  void execute(Reader reader) => reader(beamerDelegateProvider)?.beamBack();
+}
 
-  RouteActionPushedReplacement(this.routeName);
+class RouteActionPushReplacement extends RouteAction {
+  RouteActionPushReplacement(super.routeName);
 
   @override
-  void execute(BuildContext context) =>
-      context.beamToReplacementNamed(routeName);
+  void execute(Reader reader) => reader(beamerDelegateProvider)?.beamToReplacementNamed(routeName);
 }

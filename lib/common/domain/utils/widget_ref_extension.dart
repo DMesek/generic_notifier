@@ -15,10 +15,10 @@ extension WidgetRefExtension on WidgetRef {
     });
   }
 
-  void globalNavigationListener(BuildContext context) {
+  void globalNavigationListener() {
     listen<RouteAction?>(
       navigationProvider,
-      (_, state) => state?.execute(context),
+      (_, state) => state?.execute(read),
     );
   }
 }
