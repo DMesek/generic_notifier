@@ -13,12 +13,12 @@ const secondRoute = '/second';
 const thirdRoute = '/third';
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
-
   final _routerDelegate = BeamerDelegate(
     initialPath: '/',
     locationBuilder: (routeInformation, _) => BeamerLocations(routeInformation),
   );
+
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
