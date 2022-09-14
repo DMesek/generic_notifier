@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/common/domain/router/beamer_locations.dart';
 import 'package:reusability/main/custom_provider_observer.dart';
-import 'package:reusability/presentation/common/base_scaffold.dart';
+import 'package:reusability/presentation/common/base_widget.dart';
 
 void main() {
   runApp(ProviderScope(observers: [CustomProviderObserver()], child: MyApp()));
@@ -58,7 +58,7 @@ class MyApp extends ConsumerWidget {
         // routeInformationProvider: goRouter.routeInformationProvider,
         // routerDelegate: appRouter?.delegate(),
         // routeInformationParser: appRouter?.defaultRouteParser(),
-        builder: (context, child) => BaseScaffold(child: child ?? const SizedBox()),
+        builder: (context, child) => BaseWidget(child: child ?? const SizedBox()),
       ),
     );
   }

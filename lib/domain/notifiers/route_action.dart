@@ -16,8 +16,7 @@ class RouteActionPushNamed extends RouteAction {
   ///Beamer: reader(beamerDelegateProvider)?.beamToNamed(routeName);
   ///Auto route: reader(appRouterProvider)?.pushNamed(routeName);
   @override
-  void execute(Reader reader) =>
-      reader(beamerDelegateProvider)?.beamToNamed(routeName);
+  void execute(Reader reader) => reader(beamerDelegateProvider)?.beamToNamed(routeName);
 }
 
 class RouteActionPop extends RouteAction {
@@ -35,6 +34,5 @@ class RouteActionPushReplacement extends RouteAction {
   ///Beamer: reader(beamerDelegateProvider)?.beamToReplacementNamed(routeName);
   ///Auto route: reader(appRouterProvider)?.pushNamed(routeName);
   @override
-  void execute(Reader reader) =>
-      reader(beamerDelegateProvider)?.beamToReplacementNamed(routeName);
+  void execute(Reader reader) => reader(beamerDelegateProvider)?.beamToReplacementNamed(routeName);
 }

@@ -21,21 +21,21 @@ class _$AppRouter extends RootStackRouter {
       return MaterialPageX<dynamic>(
           routeData: routeData, child: const ExamplePage());
     },
-    SecondScreenRoute.name: (routeData) {
+    ExamplePage2Route.name: (routeData) {
       return MaterialPageX<dynamic>(
-          routeData: routeData, child: const SecondScreen());
+          routeData: routeData, child: const ExamplePage2());
     },
-    Screen3Route.name: (routeData) {
+    ExamplePage3Route.name: (routeData) {
       return MaterialPageX<dynamic>(
-          routeData: routeData, child: const Screen3());
+          routeData: routeData, child: const ExamplePage3());
     }
   };
 
   @override
   List<RouteConfig> get routes => [
         RouteConfig(ExamplePageRoute.name, path: '/'),
-        RouteConfig(SecondScreenRoute.name, path: '/second'),
-        RouteConfig(Screen3Route.name, path: '/second/third')
+        RouteConfig(ExamplePage2Route.name, path: '/page2'),
+        RouteConfig(ExamplePage3Route.name, path: '/page2/page3')
       ];
 }
 
@@ -48,17 +48,18 @@ class ExamplePageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [SecondScreen]
-class SecondScreenRoute extends PageRouteInfo<void> {
-  const SecondScreenRoute() : super(SecondScreenRoute.name, path: '/second');
+/// [ExamplePage2]
+class ExamplePage2Route extends PageRouteInfo<void> {
+  const ExamplePage2Route() : super(ExamplePage2Route.name, path: '/page2');
 
-  static const String name = 'SecondScreenRoute';
+  static const String name = 'ExamplePage2Route';
 }
 
 /// generated route for
-/// [Screen3]
-class Screen3Route extends PageRouteInfo<void> {
-  const Screen3Route() : super(Screen3Route.name, path: '/second/third');
+/// [ExamplePage3]
+class ExamplePage3Route extends PageRouteInfo<void> {
+  const ExamplePage3Route()
+      : super(ExamplePage3Route.name, path: '/page2/page3');
 
-  static const String name = 'Screen3Route';
+  static const String name = 'ExamplePage3Route';
 }

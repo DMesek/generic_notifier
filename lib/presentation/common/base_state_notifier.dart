@@ -5,20 +5,19 @@ import 'package:reusability/domain/failure.dart';
 import 'package:reusability/domain/notifiers/navigation_provider.dart';
 import 'package:reusability/domain/notifiers/route_action.dart';
 import 'package:reusability/presentation/common/base_loading_indicator.dart';
-import 'package:reusability/presentation/common/base_scaffold.dart';
 import 'package:reusability/presentation/common/base_state.dart';
+import 'package:reusability/presentation/common/base_widget.dart';
 
 typedef PreHandleData<T> = bool Function(T data);
 typedef PreHandleFailure = bool Function(Failure failure);
 
 ///[globalLoadingProvider] can be used to show the loading indicator without updating [BaseStateNotifier]
-///state. The entire app is wrapped in [BaseScaffold] and [BaseLoadingIndicator] can be shown above entire
+///state. The entire app is wrapped in [BaseWidget] and [BaseLoadingIndicator] can be shown above entire
 ///app by simply calling [showGlobalLoading]. To hide [BaseLoadingIndicator] simply call [clearGlobalLoading]
 final globalLoadingProvider = StateProvider<bool>((_) => false);
 final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
-abstract class BaseStateNotifier<DataState, OtherStates>
-    extends StateNotifier<BaseState<DataState, OtherStates>> {
+abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
   final Reader reader;
 
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
@@ -47,32 +46,27 @@ abstract class BaseStateNotifier<DataState, OtherStates>
 
   ///Calls [RouteActionPushNamed] execute method. Route to new route with the given name
   ///without the need to pass a context
-  void navigateToNamed(String routeName) => reader(navigationProvider.notifier)
-      .update((_) => RouteActionPushNamed(routeName));
+  void navigateToNamed(String routeName) =>
+      reader(navigationProvider.notifier).update((_) => RouteActionPushNamed(routeName));
 
   ///Calls [RouteActionPushReplacement] execute method. Replace the route
   ///without the need to pass a context
   void pushReplacementNamed(String routeName) =>
-      reader(navigationProvider.notifier)
-          .update((_) => RouteActionPushReplacement(routeName));
+      reader(navigationProvider.notifier).update((_) => RouteActionPushReplacement(routeName));
 
   ///Calls [RouteActionPop] execute method. Pop route without the need to pass a context
-  void pop() =>
-      reader(navigationProvider.notifier).update((_) => RouteActionPop());
+  void pop() => reader(navigationProvider.notifier).update((_) => RouteActionPop());
 
   ///Show [BaseLoadingIndicator] above the entire app
   @protected
-  void showGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => true);
+  void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
 
   ///Clear [BaseLoadingIndicator]
   @protected
-  void clearGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => false);
+  void clearGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => false);
 
   @protected
-  void setGlobalFailure(Failure? failure) =>
-      reader(globalFailureProvider.notifier).update((state) => failure);
+  void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
 
   void _onFailure(
     Failure failure,
@@ -85,9 +79,7 @@ abstract class BaseStateNotifier<DataState, OtherStates>
       _unsetLoading(withLoadingState);
     }
     if (shouldProceedWithFailure) {
-      globalFailure
-          ? setGlobalFailure(failure)
-          : state = BaseState.error(failure);
+      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
     }
   }
 

@@ -7,10 +7,10 @@ import 'package:reusability/presentation/common/base_loading_indicator.dart';
 import 'package:reusability/presentation/common/base_state_notifier.dart';
 import 'package:reusability/presentation/example_state_notifier.dart';
 
-class BaseScaffold extends ConsumerWidget {
+class BaseWidget extends ConsumerWidget {
   final Widget child;
 
-  const BaseScaffold({
+  const BaseWidget({
     Key? key,
     required this.child,
   }) : super(key: key);
