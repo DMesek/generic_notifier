@@ -49,12 +49,39 @@ class BaseWidget extends ConsumerWidget {
 
 **globalLoadingProvider** can be used to show the loading indicator without updating
 **BaseStateNotifier** state.
-**BaseLoadingIndicator** can be shown above entire app by simply calling **showGlobalLoading**. To
-hide **BaseLoadingIndicator** simply call **clearGlobalLoading**
 
 ```dart
 
 final globalLoadingProvider = StateProvider<bool>((_) => false);
+```
+
+### Loading example
+
+**BaseLoadingIndicator** can be shown by setting **globalLoading** inside of execute method to
+**true**
+
+```dart
+//...
+Future getSomeString() =>
+    execute(
+      _exampleRepository.getSomeString(),
+      globalLoading: true,
+    );
+//...
+```
+
+You can also change **BaseNotifier** state to BaseState.loading by setting
+**withLoadingState** to **true**
+
+```dart
+//...
+Future getSomeString() =>
+    execute(
+      _exampleRepository.getSomeString(),
+      globalLoading: true,
+      withLoadingState: true,
+    );
+//...
 ```
 
 **QNetworkResponse** object:
