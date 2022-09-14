@@ -1,6 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/common/domain/router/beamer_delegate_provider.dart';
 import 'package:reusability/common/domain/router/beamer_locations.dart';
 import 'package:reusability/main/custom_provider_observer.dart';
 import 'package:reusability/presentation/common/base_widget.dart';
@@ -58,7 +59,10 @@ class MyApp extends ConsumerWidget {
         // routeInformationProvider: goRouter.routeInformationProvider,
         // routerDelegate: appRouter?.delegate(),
         // routeInformationParser: appRouter?.defaultRouteParser(),
-        builder: (context, child) => BaseWidget(child: child ?? const SizedBox()),
+        builder: (context, child) {
+          ref.read(beamerDelegateProvider.notifier).update((state) => Beamer.of(context));
+          return BaseWidget(child: child ?? const SizedBox());
+        },
       ),
     );
   }

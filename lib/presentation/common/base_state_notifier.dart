@@ -19,6 +19,12 @@ abstract class BaseStateNotifier<DataState, OtherStates>
 
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
 
+  /// Executes received [function] with additional parameters to control if loading state should be set while executing [function] by providing [withLoadingState] param.
+  ///
+  /// Also if you want loading shown over all screens, it can se set via [globalLoading] param.
+  /// To show failure over all screens instead changing the state, it can be set via [globalFailure] params.
+  /// To filter and control which data will update the state, [onDataReceived] callback can be passed.
+  /// To filter and control which failure will update the state or be shown globally, [onFailureOccurred] callback can be passed
   @protected
   Future execute(
     EitherFailureOr<DataState> function, {
