@@ -1,7 +1,5 @@
-import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/common/domain/router/beamer_delegate_provider.dart';
 import 'package:reusability/common/domain/utils/widget_ref_extension.dart';
 import 'package:reusability/presentation/common/base_loading_indicator.dart';
 import 'package:reusability/presentation/common/base_state_notifier.dart';
@@ -19,7 +17,6 @@ class BaseWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.globalFailureListener(context);
     ref.globalNavigationListener();
-    ref.read(beamerDelegateProvider.notifier).update((state) => Beamer.of(context));
     final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
       children: [
