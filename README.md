@@ -84,6 +84,61 @@ Future getSomeString() =>
 //...
 ```
 
+### Navigation
+**globalNavigationProvider** with **RouteAction** type can be used to execute push, pop and similar
+navigation actions. Navigation can be used directly by updating **globalNavigationProvider** or
+by using descendant of **BaseStateNotifier** which initially provides **navigateToNamed**,
+**pushReplacementNamed** and **pop** methods.
+**BaseWidget** registers listener for **globalNavigationProvider** and therefore any change
+triggers **execute** method of **RouteAction** object.
+
+Default navigation package being used is **Beamer** and **RouteAction** references
+**beamerDelegateProvider** which is being set immediately in builder method of **MaterialApp.router** widget.
+
+If necessary, by with few changes navigation package can be easily switched to **AutoRoute**,
+**GoRouter** or probably to any other navigation package but here it will be provided short notes for
+these two also popular navigation packages.
+
+* changes needed for AutoRoute package:
+  * add auto_route dependency to pubspec.yaml
+  * create app_router.dart file, define **appRouterProvider** in it and AppRouter class with options
+    defined in its documentation (including generating .gr.dart file by running
+    **flutter packages pub run build_runner build** in terminal)
+    ```dart
+    final appRouterProvider = Provider<AppRouter?>((ref) {
+      return AppRouter();
+    });
+    ```
+  * in **MyApp** build method read **appRouterProvider** and pass it in MaterialApp.router constructor like that:
+    ```
+    routerDelegate: appRouter?.delegate(),
+    routeInformationParser: appRouter?.defaultRouteParser(),
+    ```
+  * in **route_action.dart** replace **beamerDelegateProvider** with **appRouterProvider** and
+    update appropriate methods of AutoRouter for pushNamed, pop and pushReplacement actions
+\
+&nbsp;
+* changes needed for go_router package:
+  * add go_router dependency to pubspec.yaml
+  * create go_router.dart file, define **goRouterProvider** which can be something like this:
+    ```
+    final goRouterProvider = StateProvider<GoRouter>((ref) {
+      return GoRouter(
+        routes: <GoRoute>[
+          ...
+        ],
+      );
+    });
+    ```
+  * in **MyApp** build method read **goRouterProvider** and pass it in MaterialApp.router constructor like that:
+    ```
+    routerDelegate: goRouter.routerDelegate,
+    routeInformationParser: goRouter.routeInformationParser,
+    routeInformationProvider: goRouter.routeInformationProvider,
+    ```
+  * in **route_action.dart** replace **beamerDelegateProvider** with **goRouterProvider** and
+    update appropriate methods of go_router for pushNamed, pop and pushReplacement actions
+
 **QNetworkResponse** object:
 
 * **Response** is a standard response object from dio package
