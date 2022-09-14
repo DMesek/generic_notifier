@@ -9,21 +9,21 @@ abstract class RouteAction {
   void execute(Reader reader);
 }
 
-///Replace it with the package action which is used in the app
-///Beamer: reader(beamerDelegateProvider)?.beamToNamed(routeName);
-///Auto route: reader(appRouterProvider)?.pushNamed(routeName);
 class RouteActionPushNamed extends RouteAction {
   RouteActionPushNamed(super.routeName);
 
+  ///Replace it with the package action which is used in the app
+  ///Beamer: reader(beamerDelegateProvider)?.beamToNamed(routeName);
+  ///Auto route: reader(appRouterProvider)?.pushNamed(routeName);
   @override
   void execute(Reader reader) =>
       reader(beamerDelegateProvider)?.beamToNamed(routeName);
 }
 
-///Replace it with the package action which is used in the app
-///Beamer: reader(beamerDelegateProvider)?.beamBack();
-///Auto route: reader(appRouterProvider)?.pop();
 class RouteActionPop extends RouteAction {
+  ///Replace it with the package action which is used in the app
+  ///Beamer: reader(beamerDelegateProvider)?.beamBack();
+  ///Auto route: reader(appRouterProvider)?.pop();
   @override
   void execute(Reader reader) => reader(beamerDelegateProvider)?.beamBack();
 }
