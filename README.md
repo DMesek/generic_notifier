@@ -87,10 +87,25 @@ Future getSomeString() =>
 ### Navigation
 **globalNavigationProvider** with **RouteAction** type can be used to execute push, pop and similar
 navigation actions. Navigation can be used directly by updating **globalNavigationProvider** or
-by using descendant of **BaseStateNotifier** which initially provides **navigateToNamed**,
+by using descendant of **BaseStateNotifier** which initially provides **pushNamed**,
 **pushReplacementNamed** and **pop** methods.
 **BaseWidget** registers listener for **globalNavigationProvider** and therefore any change
 triggers **execute** method of **RouteAction** object.
+
+To navigate to next page from current page it can be done like this:
+```
+ref.read(currentPageNotifierProvider.notifier).pushNamed(nextPageRouteName);
+```
+or to pop back to previous page:
+```
+ref.read(currentPageNotifierProvider.notifier).pop();
+```
+Navigator can be used even directly by access **globalNavigationProvider** but it is more 
+convenient to navigate through descendant of BaseStateNotifier like shown above and 
+that way you don't have to instantiate by yourself RouteAction descendant classes.
+
+If more navigation actions are necessary, RouteAction can be subclassed with desired action and 
+new method can be added into BaseStateNotifier that will use that class
 
 Default navigation package being used is **Beamer** and **RouteAction** references
 **beamerDelegateProvider** which is being set immediately in builder method of **MaterialApp.router** widget.

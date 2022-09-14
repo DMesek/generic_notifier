@@ -13,8 +13,7 @@ typedef PreHandleFailure = bool Function(Failure failure);
 
 final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
-abstract class BaseStateNotifier<DataState, OtherStates>
-    extends StateNotifier<BaseState<DataState, OtherStates>> {
+abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
   final Reader reader;
 
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
@@ -49,33 +48,27 @@ abstract class BaseStateNotifier<DataState, OtherStates>
 
   ///Calls [RouteActionPushNamed] execute method. Route to new route with the given name
   ///without the need to pass a context
-  void navigateToNamed(String routeName) =>
-      reader(globalNavigationProvider.notifier)
-          .update((_) => RouteActionPushNamed(routeName));
+  void pushNamed(String routeName) =>
+      reader(globalNavigationProvider.notifier).update((_) => RouteActionPushNamed(routeName));
 
   ///Calls [RouteActionPushReplacement] execute method. Replace the route
   ///without the need to pass a context
   void pushReplacementNamed(String routeName) =>
-      reader(globalNavigationProvider.notifier)
-          .update((_) => RouteActionPushReplacement(routeName));
+      reader(globalNavigationProvider.notifier).update((_) => RouteActionPushReplacementNamed(routeName));
 
   ///Calls [RouteActionPop] execute method. Pop route without the need to pass a context
-  void pop() =>
-      reader(globalNavigationProvider.notifier).update((_) => RouteActionPop());
+  void pop() => reader(globalNavigationProvider.notifier).update((_) => RouteActionPop());
 
   ///Show [BaseLoadingIndicator] above the entire app
   @protected
-  void showGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => true);
+  void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
 
   ///Clear [BaseLoadingIndicator]
   @protected
-  void clearGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => false);
+  void clearGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => false);
 
   @protected
-  void setGlobalFailure(Failure? failure) =>
-      reader(globalFailureProvider.notifier).update((state) => failure);
+  void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
 
   void _onFailure(
     Failure failure,
@@ -88,9 +81,7 @@ abstract class BaseStateNotifier<DataState, OtherStates>
       _unsetLoading(withLoadingState);
     }
     if (shouldProceedWithFailure) {
-      globalFailure
-          ? setGlobalFailure(failure)
-          : state = BaseState.error(failure);
+      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
     }
   }
 

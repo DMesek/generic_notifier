@@ -30,7 +30,7 @@ class ExamplePage extends ConsumerWidget {
               child: const Text('Get string'),
             ),
             TextButton(
-              onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(ExamplePage2.routeName),
+              onPressed: () => ref.read(exampleNotifierProvider.notifier).pushNamed(ExamplePage2.routeName),
               child: const Text('Navigate'),
             ),
           ],
@@ -58,7 +58,7 @@ class ExamplePage2 extends ConsumerWidget {
             child: const Text('Go back!'),
           ),
           TextButton(
-            onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(ExamplePage3.routeName),
+            onPressed: () => ref.read(exampleNotifierProvider.notifier).pushNamed(ExamplePage3.routeName),
             child: const Text('Navigate'),
           ),
         ],

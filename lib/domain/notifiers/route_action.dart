@@ -27,8 +27,8 @@ class RouteActionPop extends RouteAction {
   void execute(Reader reader) => reader(beamerDelegateProvider)?.beamBack();
 }
 
-class RouteActionPushReplacement extends RouteAction {
-  RouteActionPushReplacement(super.routeName);
+class RouteActionPushReplacementNamed extends RouteAction {
+  RouteActionPushReplacementNamed(super.routeName);
 
   ///Replace it with the package action which is used in the app
   ///Beamer: reader(beamerDelegateProvider)?.beamToReplacementNamed(routeName);
