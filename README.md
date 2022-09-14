@@ -84,6 +84,33 @@ Future getSomeString() =>
 //...
 ```
 
+### Global failures
+
+**globalFailureProvider** can be used to show the failure that happened in the application without 
+updating **BaseStateNotifier** state.
+
+```dart
+
+final globalFailureProvider = StateProvider<Failure?>((_) => null);
+```
+
+### Failure example
+
+**globalFailureProvider** listener will be triggered by setting **globalFailure** inside of execute 
+method to **true** when failure happens which can actually can be omitted being the default option. 
+If set to false, instead of updating globalFailureProvider, **BaseStateNotifier** state will be 
+set to error so the failure can be shown directly on the screen, not in the overlay as a toast or dialog.
+
+```dart
+//...
+Future getSomeString() =>
+    execute(
+      _exampleRepository.getSomeString(),
+      globalFailure: false,
+    );
+//...
+```
+
 ### Navigation
 **globalNavigationProvider** with **RouteAction** type can be used to execute push, pop and similar
 navigation actions. Navigation can be used directly by updating **globalNavigationProvider** or

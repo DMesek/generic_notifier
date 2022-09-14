@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/common/domain/router/base_router.dart';
 import 'package:reusability/domain/failure.dart';
+import 'package:reusability/domain/notifiers/global_failure_provider.dart';
 import 'package:reusability/domain/notifiers/navigation_provider.dart';
 import 'package:reusability/domain/notifiers/route_action.dart';
-import 'package:reusability/presentation/common/base_state_notifier.dart';
 
 extension WidgetRefExtension on WidgetRef {
   void globalFailureListener(BuildContext _) {

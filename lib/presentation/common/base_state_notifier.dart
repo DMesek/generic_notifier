@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/domain/either_failure_or.dart';
 import 'package:reusability/domain/failure.dart';
+import 'package:reusability/domain/notifiers/global_failure_provider.dart';
 import 'package:reusability/domain/notifiers/global_loading_provider.dart';
 import 'package:reusability/domain/notifiers/navigation_provider.dart';
 import 'package:reusability/domain/notifiers/route_action.dart';
@@ -10,8 +11,6 @@ import 'package:reusability/presentation/common/base_state.dart';
 
 typedef PreHandleData<T> = bool Function(T data);
 typedef PreHandleFailure = bool Function(Failure failure);
-
-final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
 abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
   final Reader reader;
