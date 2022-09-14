@@ -1,6 +1,5 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reusability/main.dart';
 import 'package:reusability/presentation/example_page.dart';
 
 class BeamerLocations extends BeamLocation<BeamState> {
@@ -8,9 +7,9 @@ class BeamerLocations extends BeamLocation<BeamState> {
 
   @override
   List<Pattern> get pathPatterns => [
-        '/',
-        secondRoute,
-        thirdRoute,
+        ExamplePage.routeName,
+        ExamplePage2.routeName,
+        ExamplePage3.routeName,
       ];
 
   @override
@@ -21,17 +20,17 @@ class BeamerLocations extends BeamLocation<BeamState> {
         title: 'Example',
         child: ExamplePage(),
       ),
-      if (state.uri.pathSegments.contains('second'))
+      if (state.uri.pathSegments.contains('page2'))
         const BeamPage(
-          key: ValueKey('secondScreen'),
-          title: 'SecondScreen',
-          child: SecondScreen(),
+          key: ValueKey('examplePage2'),
+          title: 'ExamplePage2',
+          child: ExamplePage2(),
         ),
-      if (state.uri.pathSegments.contains('third'))
+      if (state.uri.pathSegments.contains('page3'))
         const BeamPage(
-          key: ValueKey('screen3'),
-          title: 'Screen3',
-          child: Screen3(),
+          key: ValueKey('examplePage3'),
+          title: 'ExamplePage3',
+          child: ExamplePage3(),
         ),
     ];
   }

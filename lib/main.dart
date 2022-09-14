@@ -13,29 +13,26 @@ void main() {
 //   return GoRouter(
 //     routes: <GoRoute>[
 //       GoRoute(
-//         path: '/',
+//         path: ExamplePage.routeName,
 //         builder: (BuildContext context, GoRouterState state) {
 //           return const ExamplePage();
 //         },
 //       ),
 //       GoRoute(
-//         path: secondRoute,
+//         path: ExamplePage2.routeName,
 //         builder: (BuildContext context, GoRouterState state) {
-//           return const SecondScreen();
+//           return const ExamplePage2();
 //         },
 //       ),
 //       GoRoute(
-//         path: thirdRoute,
+//         path: ExamplePage3.routeName,
 //         builder: (BuildContext context, GoRouterState state) {
-//           return const Screen3();
+//           return const ExamplePage3();
 //         },
 //       ),
 //     ],
 //   );
 // });
-
-const secondRoute = '/second';
-const thirdRoute = '/third';
 
 class MyApp extends ConsumerWidget {
   final routerDelegate = BeamerDelegate(

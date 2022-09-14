@@ -35,7 +35,7 @@ class _$AppRouter extends RootStackRouter {
   List<RouteConfig> get routes => [
         RouteConfig(ExamplePageRoute.name, path: '/'),
         RouteConfig(SecondScreenRoute.name, path: '/second'),
-        RouteConfig(Screen3Route.name, path: '/third')
+        RouteConfig(Screen3Route.name, path: '/second/third')
       ];
 }
 
@@ -58,7 +58,7 @@ class SecondScreenRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [Screen3]
 class Screen3Route extends PageRouteInfo<void> {
-  const Screen3Route() : super(Screen3Route.name, path: '/third');
+  const Screen3Route() : super(Screen3Route.name, path: '/second/third');
 
   static const String name = 'Screen3Route';
 }
