@@ -17,7 +17,7 @@ extension WidgetRefExtension on WidgetRef {
 
   void globalNavigationListener() {
     listen<RouteAction?>(
-      navigationProvider,
+      globalNavigationProvider,
       (_, state) => state?.execute(read),
     );
   }

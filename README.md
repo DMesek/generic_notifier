@@ -1,16 +1,75 @@
-# reusability
+# Generic notifier
 
-A new Flutter project.
+Generic notifier which every notifier should extend to avoid writing repetitive code and to access
+global loading, error handling and route navigation.
 
-## Getting Started
+Uses **[Riverpod package](https://pub.dev/packages/riverpod)**.
 
-This project is a starting point for a Flutter application.
+## Add dependency
 
-A few resources to get you started if this is your first Flutter project:
+## Usage
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### BaseWidget
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The entire app is wrapped in **BaseWidget** which listens to  **globalFailureListener**,
+**globalNavigationProvider** & **globalFailureProvider**.
+
+```dart
+
+class BaseWidget extends ConsumerWidget {
+  final Widget child;
+
+  const BaseWidget({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.globalFailureListener(context);
+    ref.globalNavigationListener();
+    final showLoading = ref.watch(globalLoadingProvider);
+    return Stack(
+      children: [
+        Scaffold(
+          body: child,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () =>
+                ref.read(exampleNotifierProvider.notifier).getSomeString(),
+          ),
+        ),
+        if (showLoading) const BaseLoadingIndicator(),
+      ],
+    );
+  }
+}
+```
+
+### Loading
+
+**globalLoadingProvider** can be used to show the loading indicator without updating
+**BaseStateNotifier** state.
+**BaseLoadingIndicator** can be shown above entire app by simply calling **showGlobalLoading**. To
+hide **BaseLoadingIndicator** simply call **clearGlobalLoading**
+
+```dart
+
+final globalLoadingProvider = StateProvider<bool>((_) => false);
+```
+
+**QNetworkResponse** object:
+
+* **Response** is a standard response object from dio package
+
+* **APIVersionStatus** enum with values:
+    * supported
+
+    * unsupported
+
+    * sunset
+
+&nbsp;
+
+### Simulate API status response demo
+
+<img src="./assets/simulate_api_status.gif" width="30%" height="30%"/>

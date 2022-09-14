@@ -49,18 +49,19 @@ abstract class BaseStateNotifier<DataState, OtherStates>
 
   ///Calls [RouteActionPushNamed] execute method. Route to new route with the given name
   ///without the need to pass a context
-  void navigateToNamed(String routeName) => reader(navigationProvider.notifier)
-      .update((_) => RouteActionPushNamed(routeName));
+  void navigateToNamed(String routeName) =>
+      reader(globalNavigationProvider.notifier)
+          .update((_) => RouteActionPushNamed(routeName));
 
   ///Calls [RouteActionPushReplacement] execute method. Replace the route
   ///without the need to pass a context
   void pushReplacementNamed(String routeName) =>
-      reader(navigationProvider.notifier)
+      reader(globalNavigationProvider.notifier)
           .update((_) => RouteActionPushReplacement(routeName));
 
   ///Calls [RouteActionPop] execute method. Pop route without the need to pass a context
   void pop() =>
-      reader(navigationProvider.notifier).update((_) => RouteActionPop());
+      reader(globalNavigationProvider.notifier).update((_) => RouteActionPop());
 
   ///Show [BaseLoadingIndicator] above the entire app
   @protected
