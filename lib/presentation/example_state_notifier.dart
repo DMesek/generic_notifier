@@ -12,7 +12,7 @@ class ExampleStateNotifier extends BaseStateNotifier<String, Object> {
 
   ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
 
-  Future getSomeString() => execute(_exampleRepository.getSomeString(), withLoadingState: false);
+  Future getSomeString() => execute(_exampleRepository.getSomeString(), withLoadingState: true, globalLoading: true);
 
   Future getSomeOtherString() => execute(
         _exampleRepository.getSomeOtherString(),

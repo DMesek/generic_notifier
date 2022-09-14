@@ -1,44 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/main.dart';
 import 'package:reusability/presentation/example_state_notifier.dart';
 
 class ExamplePage extends ConsumerWidget {
+  static const routeName = '/';
+
   const ExamplePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(exampleNotifierProvider);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            state.when(
-              data: (sentence) => sentence,
-              loading: () => 'Loading',
-              other: (_) => 'Other',
-              initial: () => 'Initial',
-              error: (failure) => failure.toString(),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              state.when(
+                data: (sentence) => sentence,
+                loading: () => 'Loading',
+                other: (_) => 'Other',
+                initial: () => 'Initial',
+                error: (failure) => failure.toString(),
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: ref.read(exampleNotifierProvider.notifier).getSomeString,
-            child: const Text('Get string'),
-          ),
-          TextButton(
-            onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(secondRoute),
-            child: const Text('Navigate'),
-          ),
-        ],
+            TextButton(
+              onPressed: ref.read(exampleNotifierProvider.notifier).getSomeString,
+              child: const Text('Get string'),
+            ),
+            TextButton(
+              onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(ExamplePage2.routeName),
+              child: const Text('Navigate'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class SecondScreen extends ConsumerWidget {
-  const SecondScreen({super.key});
+class ExamplePage2 extends ConsumerWidget {
+  static const routeName = '/page2';
+
+  const ExamplePage2({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,7 +58,7 @@ class SecondScreen extends ConsumerWidget {
             child: const Text('Go back!'),
           ),
           TextButton(
-            onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(thirdRoute),
+            onPressed: () => ref.read(exampleNotifierProvider.notifier).navigateToNamed(ExamplePage3.routeName),
             child: const Text('Navigate'),
           ),
         ],
@@ -62,8 +67,10 @@ class SecondScreen extends ConsumerWidget {
   }
 }
 
-class Screen3 extends ConsumerWidget {
-  const Screen3({super.key});
+class ExamplePage3 extends ConsumerWidget {
+  static const routeName = '${ExamplePage2.routeName}/page3';
+
+  const ExamplePage3({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
