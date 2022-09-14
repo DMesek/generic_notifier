@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/common/domain/router/base_router.dart';
 import 'package:reusability/domain/failure.dart';
 import 'package:reusability/domain/notifiers/navigation_provider.dart';
 import 'package:reusability/domain/notifiers/route_action.dart';
@@ -15,10 +16,10 @@ extension WidgetRefExtension on WidgetRef {
     });
   }
 
-  void globalNavigationListener() {
+  void globalNavigationListener(BaseRouter baseRouter) {
     listen<RouteAction?>(
       globalNavigationProvider,
-      (_, state) => state?.execute(read),
+      (_, state) => state?.execute(baseRouter),
     );
   }
 }

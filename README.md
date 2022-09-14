@@ -105,54 +105,79 @@ convenient to navigate through descendant of BaseStateNotifier like shown above 
 that way you don't have to instantiate by yourself RouteAction descendant classes.
 
 If more navigation actions are necessary, RouteAction can be subclassed with desired action and 
-new method can be added into BaseStateNotifier that will use that class
+new method can be added into BaseStateNotifier that will use that class. Also, BaseRouter can be 
+expanded with new navigation method and then implemented in the descendant class which will be used 
+in RouteAction descendant class.
 
-Default navigation package being used is **Beamer** and **RouteAction** references
-**beamerDelegateProvider** which is being set immediately in builder method of **MaterialApp.router** widget.
+Default navigation package being used is **Beamer** and in **baseRouterProvider** its BaseRouter 
+subclass BeamerRouter is being instantiated. 
 
-If necessary, by with few changes navigation package can be easily switched to **AutoRoute**,
-**GoRouter** or probably to any other navigation package but here it will be provided short notes for
-these two also popular navigation packages.
+If necessary, by making few changes navigation package can be easily switched to **AutoRoute**,
+**GoRouter** or probably any other navigation package but here it will be provided short notes for
+just two popular alternatives to Beamer.
 
 * changes needed for AutoRoute package:
   * add auto_route dependency to pubspec.yaml
-  * create app_router.dart file, define **appRouterProvider** in it and AppRouter class with options
-    defined in its documentation (including generating .gr.dart file by running
-    **flutter packages pub run build_runner build** in terminal)
-    ```dart
-    final appRouterProvider = Provider<AppRouter?>((ref) {
-      return AppRouter();
-    });
-    ```
-  * in **MyApp** build method read **appRouterProvider** and pass it in MaterialApp.router constructor like that:
-    ```
-    routerDelegate: appRouter?.delegate(),
-    routeInformationParser: appRouter?.defaultRouteParser(),
-    ```
-  * in **route_action.dart** replace **beamerDelegateProvider** with **appRouterProvider** and
-    update appropriate methods of AutoRouter for pushNamed, pop and pushReplacement actions
+  * create app_router.dart file, define AppRouter class with options defined in its documentation 
+  * (including generating .gr.dart file by running **flutter packages pub run build_runner build** in terminal)
+  * create **AppRouterRouter** class in **base_router.dart** and override BaseRouter's navigation methods,
+  it can look something like this:
+  ```
+  class AppRouterRouter extends BaseRouter {
+    AppRouterRouter({required super.routerDelegate, required super.routeInformationParser, super.router});
+
+    @override
+    void pushNamed(String routeName) {
+      (router as AppRouter).pushNamed(routeName);
+    }
+  
+    ...
+  }
+  ```
+  * update **baseRouterProvider** in **base_router_provider.dart** to use **AppRouterRouter** class 
+  instead of **BeamerRouter**
+  * remove **BeamerProvider** widget from **main.dart**
 \
 &nbsp;
 * changes needed for go_router package:
   * add go_router dependency to pubspec.yaml
-  * create go_router.dart file, define **goRouterProvider** which can be something like this:
-    ```
-    final goRouterProvider = StateProvider<GoRouter>((ref) {
-      return GoRouter(
-        routes: <GoRoute>[
-          ...
-        ],
-      );
+  * create **GoRouterRouter** class in **base_router.dart** and override BaseRouter's navigation methods,
+    it can look something like this:
+  ```
+  class GoRouterRouter extends BaseRouter {
+    GoRouterRouter({
+      required super.routerDelegate,
+      required super.routeInformationParser,
+      super.routeInformationProvider,
+      super.router,
     });
-    ```
-  * in **MyApp** build method read **goRouterProvider** and pass it in MaterialApp.router constructor like that:
-    ```
-    routerDelegate: goRouter.routerDelegate,
-    routeInformationParser: goRouter.routeInformationParser,
-    routeInformationProvider: goRouter.routeInformationProvider,
-    ```
-  * in **route_action.dart** replace **beamerDelegateProvider** with **goRouterProvider** and
-    update appropriate methods of go_router for pushNamed, pop and pushReplacement actions
+  
+    @override
+    void pushNamed(String routeName) {
+      (router as GoRouter).push(routeName);
+    }
+  
+    ...
+  }
+  ```
+  * update **baseRouterProvider** in **base_router_provider.dart** to use **GoRouterRouter** class
+    instead of **BeamerRouter**
+  ```
+  final baseRouterProvider = StateProvider<BaseRouter>((ref) {
+    final goRouter = GoRouter(
+      routes: <GoRoute>[
+        ...
+      ],
+    );
+    return GoRouterRouter(
+      routerDelegate: goRouter.routerDelegate,
+      routeInformationParser: goRouter.routeInformationParser,
+      routeInformationProvider: goRouter.routeInformationProvider,
+      router: goRouter,
+    );
+  });
+  ```
+  * remove **BeamerProvider** widget from **main.dart**
 
 **QNetworkResponse** object:
 
