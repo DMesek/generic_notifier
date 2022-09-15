@@ -89,9 +89,10 @@ class OtherStateExample with _$OtherStateExample {
 
  ```dart
 
+
 final exampleNotifierProvider = StateNotifierProvider<ExampleStateNotifier,
     BaseState<String, OtherStateExample>>(
-  (ref) => ExampleStateNotifier(SentenceRepository(), ref.read),
+      (ref) => ExampleStateNotifier(SentenceRepository(), ref.read),
 );
 
 class ExampleStateNotifier
@@ -100,6 +101,13 @@ class ExampleStateNotifier
 
   ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
 
+  ///Example of the API request with loading indicator and not changed state
+  Future getSomeString() => execute(
+    _exampleRepository.getSomeString(),
+    globalLoading: true,
+    withLoadingState: false,
+  );
+
   ///Example on how to use additional states
   Future<void> getSomeStringWithOtherState() async {
     state = const BaseState.other(OtherStateExample.fetching());
@@ -107,26 +115,21 @@ class ExampleStateNotifier
       _exampleRepository.getSomeOtherString(),
       globalLoading: true,
       onFailureOccurred: (error) {
-        //Set custom state
+        ///Set custom state
         state = BaseState.other(OtherStateExample.customError(error));
-        //Return false because we don't want to update BaseState to BaseState.error
+
+        ///Return false because we don't want to update BaseState to BaseState.error
         return false;
       },
       onDataReceived: (_) {
-        //Set custom state
+        ///Set custom state
         state = const BaseState.other(OtherStateExample.empty());
-        //Return false because we don't want to update BaseState to BaseState.data(_)
+
+        ///Return false because we don't want to update BaseState to BaseState.data(_)
         return false;
       },
     );
   }
-
-  ///Example of the API request with loading indicator and not changed state
-  Future getSomeString() => execute(
-        _exampleRepository.getSomeString(),
-        globalLoading: true,
-        withLoadingState: false,
-      );
 }
 
 

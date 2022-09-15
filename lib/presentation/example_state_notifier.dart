@@ -14,6 +14,13 @@ class ExampleStateNotifier
 
   ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
 
+  ///Example of the API request with loading indicator and not changed state
+  Future getSomeString() => execute(
+        _exampleRepository.getSomeString(),
+        globalLoading: true,
+        withLoadingState: false,
+      );
+
   ///Example on how to use additional states
   Future<void> getSomeStringWithOtherState() async {
     state = const BaseState.other(OtherStateExample.fetching());
@@ -36,11 +43,4 @@ class ExampleStateNotifier
       },
     );
   }
-
-  ///Example of the API request with loading indicator and not changed state
-  Future getSomeString() => execute(
-        _exampleRepository.getSomeString(),
-        globalLoading: true,
-        withLoadingState: false,
-      );
 }
