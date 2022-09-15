@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/common/domain/router/base_router.dart';
 import 'package:reusability/common/domain/router/beamer_locations.dart';
 
-final baseRouterProvider = StateProvider<BaseRouter>((ref) {
+final baseRouterProvider = Provider<BaseRouter>((ref) {
   // final appRouter = AppRouter();
   // return AppRouterRouter(
   //   routerDelegate: appRouter.delegate(),
