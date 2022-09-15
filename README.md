@@ -112,10 +112,9 @@ void globalFailureListener(BuildContext _) {
 ### Failure example
 
 **globalFailureProvider** listener will be triggered by setting **globalFailure** inside of execute
-method to **true** when failure happens which can actually can be omitted being the default option.
-If set to false, instead of updating globalFailureProvider, **BaseStateNotifier** state will be set
-to error so the failure can be shown directly on the screen, not in the overlay as a toast or
-dialog.
+method to **true** when failure happens. If set to false, instead of updating globalFailureProvider,
+**BaseStateNotifier** state will be set to error so the failure can be shown directly on the screen,
+not in the overlay as a toast or a dialog.
 
 ```dart
 //...
@@ -148,7 +147,7 @@ void globalNavigationListener(BaseRouter baseRouter) {
 }
 ```
 
-To navigate to next page from current page it can be done like this:
+To navigate from current to the next page it can be done like this:
 
 ```
 ref.read(currentPageNotifierProvider.notifier).pushNamed(nextPageRouteName);
@@ -160,7 +159,7 @@ or to pop back to previous page:
 ref.read(currentPageNotifierProvider.notifier).pop();
 ```
 
-Navigator can be used even directly by access **globalNavigationProvider** but it is more convenient
+Navigator can be used even directly by accessing **globalNavigationProvider** but it is more convenient
 to navigate through descendant of BaseStateNotifier like shown above and that way you don't have to
 instantiate by yourself RouteAction descendant classes.
 
@@ -173,8 +172,8 @@ Default navigation package being used is **Beamer** and in **baseRouterProvider*
 subclass BeamerRouter is being instantiated.
 
 If necessary, by making few changes navigation package can be easily switched to **AutoRoute**,
-**GoRouter** or probably any other navigation package but here it will be provided short notes for
-just two popular alternatives to Beamer.
+**GoRouter** or probably any other navigation package but here short notes will be provided for
+only two mentioned alternatives to Beamer.
 
 &nbsp;
 
