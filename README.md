@@ -5,8 +5,6 @@ global loading, error handling and route navigation.
 
 Uses **[Riverpod package](https://pub.dev/packages/riverpod)**.
 
-## Add dependency
-
 ## Usage
 
 ### BaseWidget
@@ -135,7 +133,6 @@ using descendant of **BaseStateNotifier** which initially provides **pushNamed**
 **pushReplacementNamed** and **pop** methods.
 **BaseWidget** registers listener for **globalNavigationProvider** and therefore any change
 triggers **execute** method of **RouteAction** object.
-
 
 ### How it works
 

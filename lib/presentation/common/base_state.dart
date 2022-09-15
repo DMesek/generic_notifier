@@ -15,3 +15,12 @@ class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
 
   const factory BaseState.error(Failure failure) = _Error;
 }
+
+@freezed
+class OtherStateExample with _$OtherStateExample {
+  const factory OtherStateExample.empty() = _Empty;
+
+  const factory OtherStateExample.fetching() = _Fetching;
+
+  const factory OtherStateExample.customError() = _CustomError;
+}

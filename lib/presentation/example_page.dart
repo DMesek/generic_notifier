@@ -20,17 +20,30 @@ class ExamplePage extends ConsumerWidget {
               state.when(
                 data: (sentence) => sentence,
                 loading: () => 'Loading',
-                other: (_) => 'Other',
+                other: (otherState) => otherState.when(
+                  empty: () => 'Empty',
+                  fetching: () => 'Fetching',
+                  customError: () => 'Custom error',
+                ),
                 initial: () => 'Initial',
                 error: (failure) => failure.toString(),
               ),
             ),
             TextButton(
-              onPressed: ref.read(exampleNotifierProvider.notifier).getSomeString,
+              onPressed: ref
+                  .read(exampleNotifierProvider.notifier)
+                  .getSomeStringWithOtherState,
+              child: const Text('Other state sexample'),
+            ),
+            TextButton(
+              onPressed:
+                  ref.read(exampleNotifierProvider.notifier).getSomeString,
               child: const Text('Get string'),
             ),
             TextButton(
-              onPressed: () => ref.read(exampleNotifierProvider.notifier).pushNamed(ExamplePage2.routeName),
+              onPressed: () => ref
+                  .read(exampleNotifierProvider.notifier)
+                  .pushNamed(ExamplePage2.routeName),
               child: const Text('Navigate'),
             ),
           ],
@@ -58,7 +71,9 @@ class ExamplePage2 extends ConsumerWidget {
             child: const Text('Go back!'),
           ),
           TextButton(
-            onPressed: () => ref.read(exampleNotifierProvider.notifier).pushNamed(ExamplePage3.routeName),
+            onPressed: () => ref
+                .read(exampleNotifierProvider.notifier)
+                .pushNamed(ExamplePage3.routeName),
             child: const Text('Navigate'),
           ),
         ],
