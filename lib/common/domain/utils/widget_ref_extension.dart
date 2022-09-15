@@ -12,7 +12,11 @@ extension WidgetRefExtension on WidgetRef {
   void globalFailureListener(BuildContext _) {
     listen<Failure?>(globalFailureProvider, (_, failure) {
       if (failure == null) return;
-      log('showing ${failure.isCritical ? '' : 'non-'}critical failure with title ${failure.title}, error: ${failure.error} \nand stackTrace: ${failure.stackTrace}');
+      //Show global error
+      log('''showing ${failure.isCritical ? '' : 'non-'}critical failure with title ${failure.title},
+          error: ${failure.error},
+          stackTrace: ${failure.stackTrace}
+      ''');
     });
   }
 

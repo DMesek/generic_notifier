@@ -27,7 +27,7 @@ class BaseWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.globalFailureListener(context);
-    ref.globalNavigationListener();
+    ref.globalNavigationListener(ref.read(baseRouterProvider));
     final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
       children: [
@@ -86,7 +86,7 @@ Future getSomeString() =>
 
 ### Global failures
 
-**globalFailureProvider** can be used to show the failure that happened in the application without 
+**globalFailureProvider** can be used to show the failure that happened in the application without
 updating **BaseStateNotifier** state.
 
 ```dart
@@ -94,12 +94,28 @@ updating **BaseStateNotifier** state.
 final globalFailureProvider = StateProvider<Failure?>((_) => null);
 ```
 
+### How it works
+
+```dart
+void globalFailureListener(BuildContext _) {
+  listen<Failure?>(globalFailureProvider, (_, failure) {
+    if (failure == null) return;
+    //Show global error
+    log('''showing ${failure.isCritical ? '' : 'non-'}critical failure with title ${failure.title},
+          error: ${failure.error},
+          stackTrace: ${failure.stackTrace}
+      ''');
+  });
+}
+```
+
 ### Failure example
 
-**globalFailureProvider** listener will be triggered by setting **globalFailure** inside of execute 
-method to **true** when failure happens which can actually can be omitted being the default option. 
-If set to false, instead of updating globalFailureProvider, **BaseStateNotifier** state will be 
-set to error so the failure can be shown directly on the screen, not in the overlay as a toast or dialog.
+**globalFailureProvider** listener will be triggered by setting **globalFailure** inside of execute
+method to **true** when failure happens which can actually can be omitted being the default option.
+If set to false, instead of updating globalFailureProvider, **BaseStateNotifier** state will be set
+to error so the failure can be shown directly on the screen, not in the overlay as a toast or
+dialog.
 
 ```dart
 //...
@@ -112,43 +128,65 @@ Future getSomeString() =>
 ```
 
 ### Navigation
+
 **globalNavigationProvider** with **RouteAction** type can be used to execute push, pop and similar
-navigation actions. Navigation can be used directly by updating **globalNavigationProvider** or
-by using descendant of **BaseStateNotifier** which initially provides **pushNamed**,
+navigation actions. Navigation can be used directly by updating **globalNavigationProvider** or by
+using descendant of **BaseStateNotifier** which initially provides **pushNamed**,
 **pushReplacementNamed** and **pop** methods.
 **BaseWidget** registers listener for **globalNavigationProvider** and therefore any change
 triggers **execute** method of **RouteAction** object.
 
+
+### How it works
+
+```dart
+void globalNavigationListener(BaseRouter baseRouter) {
+  listen<RouteAction?>(
+    globalNavigationProvider,
+        (_, state) => state?.execute(baseRouter),
+  );
+}
+```
+
 To navigate to next page from current page it can be done like this:
+
 ```
 ref.read(currentPageNotifierProvider.notifier).pushNamed(nextPageRouteName);
 ```
+
 or to pop back to previous page:
+
 ```
 ref.read(currentPageNotifierProvider.notifier).pop();
 ```
-Navigator can be used even directly by access **globalNavigationProvider** but it is more 
-convenient to navigate through descendant of BaseStateNotifier like shown above and 
-that way you don't have to instantiate by yourself RouteAction descendant classes.
 
-If more navigation actions are necessary, RouteAction can be subclassed with desired action and 
-new method can be added into BaseStateNotifier that will use that class. Also, BaseRouter can be 
-expanded with new navigation method and then implemented in the descendant class which will be used 
+Navigator can be used even directly by access **globalNavigationProvider** but it is more convenient
+to navigate through descendant of BaseStateNotifier like shown above and that way you don't have to
+instantiate by yourself RouteAction descendant classes.
+
+If more navigation actions are necessary, RouteAction can be subclassed with desired action and new
+method can be added into BaseStateNotifier that will use that class. Also, BaseRouter can be
+expanded with new navigation method and then implemented in the descendant class which will be used
 in RouteAction descendant class.
 
-Default navigation package being used is **Beamer** and in **baseRouterProvider** its BaseRouter 
-subclass BeamerRouter is being instantiated. 
+Default navigation package being used is **Beamer** and in **baseRouterProvider** its BaseRouter
+subclass BeamerRouter is being instantiated.
 
 If necessary, by making few changes navigation package can be easily switched to **AutoRoute**,
 **GoRouter** or probably any other navigation package but here it will be provided short notes for
 just two popular alternatives to Beamer.
 
-* changes needed for AutoRoute package:
-  * add auto_route dependency to pubspec.yaml
-  * create app_router.dart file, define AppRouter class with options defined in its documentation 
-  * (including generating .gr.dart file by running **flutter packages pub run build_runner build** in terminal)
-  * create **AppRouterRouter** class in **base_router.dart** and override BaseRouter's navigation methods,
-  it can look something like this:
+&nbsp;
+
+### Changes needed for AutoRoute package:
+
+1. add auto_route dependency to pubspec.yaml
+2. create app_router.dart file, define AppRouter class with options defined in its documentation
+3. (including generating .gr.dart file by running **flutter packages pub run build_runner build**
+   in terminal)
+4. create **AppRouterRouter** class in **base_router.dart** and override BaseRouter's navigation
+   methods, it can look something like this:
+
   ```
   class AppRouterRouter extends BaseRouter {
     AppRouterRouter({required super.routerDelegate, required super.routeInformationParser, super.router});
@@ -161,34 +199,39 @@ just two popular alternatives to Beamer.
     ...
   }
   ```
-  * update **baseRouterProvider** in **base_router_provider.dart** to use **AppRouterRouter** class 
-  instead of **BeamerRouter**
-  * remove **BeamerProvider** widget from **main.dart**
-\
+
+5. update **baseRouterProvider** in **base_router_provider.dart** to use **AppRouterRouter**
+   class instead of **BeamerRouter**
+6. remove **BeamerProvider** widget from **main.dart**
+
 &nbsp;
-* changes needed for go_router package:
-  * add go_router dependency to pubspec.yaml
-  * create **GoRouterRouter** class in **base_router.dart** and override BaseRouter's navigation methods,
-    it can look something like this:
-  ```
-  class GoRouterRouter extends BaseRouter {
-    GoRouterRouter({
-      required super.routerDelegate,
-      required super.routeInformationParser,
-      super.routeInformationProvider,
-      super.router,
-    });
-  
-    @override
-    void pushNamed(String routeName) {
-      (router as GoRouter).push(routeName);
-    }
-  
-    ...
-  }
-  ```
-  * update **baseRouterProvider** in **base_router_provider.dart** to use **GoRouterRouter** class
-    instead of **BeamerRouter**
+
+### Changes needed for go_router package:
+
+1. add go_router dependency to pubspec.yaml
+
+2. create **GoRouterRouter** class in **base_router.dart** and override BaseRouter's navigation
+   methods, it can look something like this:
+      ```
+      class GoRouterRouter extends BaseRouter {
+        GoRouterRouter({
+          required super.routerDelegate,
+          required super.routeInformationParser,
+          super.routeInformationProvider,
+          super.router,
+        });
+      
+        @override
+        void pushNamed(String routeName) {
+          (router as GoRouter).push(routeName);
+        }
+      
+        ...
+      }
+      ```
+3. update **baseRouterProvider** in **base_router_provider.dart** to use **GoRouterRouter** class
+   instead of **BeamerRouter**
+
   ```
   final baseRouterProvider = StateProvider<BaseRouter>((ref) {
     final goRouter = GoRouter(
@@ -204,21 +247,8 @@ just two popular alternatives to Beamer.
     );
   });
   ```
-  * remove **BeamerProvider** widget from **main.dart**
 
-**QNetworkResponse** object:
-
-* **Response** is a standard response object from dio package
-
-* **APIVersionStatus** enum with values:
-    * supported
-
-    * unsupported
-
-    * sunset
+4. remove **BeamerProvider** widget from **main.dart**
 
 &nbsp;
 
-### Simulate API status response demo
-
-<img src="./assets/simulate_api_status.gif" width="30%" height="30%"/>
