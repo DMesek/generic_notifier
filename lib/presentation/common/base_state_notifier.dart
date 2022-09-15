@@ -21,8 +21,10 @@ abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<B
   ///
   /// Also if you want loading shown over all screens, it can se set via [globalLoading] param.
   /// To show failure over all screens instead changing the state, it can be set via [globalFailure] params.
-  /// To filter and control which data will update the state, [onDataReceived] callback can be passed.
-  /// To filter and control which failure will update the state or be shown globally, [onFailureOccurred] callback can be passed
+  /// To filter and control which data will update the state, [onDataReceived] callback can be passed. Alternatively,
+  /// if callback always return false, custom data handling can be implemented.
+  /// To filter and control which failure will update the state or be shown globally, [onFailureOccurred] callback can be
+  /// passed. Similar to [onDataReceived] if always returned false, custom failure handling can be implemented.
   @protected
   Future execute(
     EitherFailureOr<DataState> function, {

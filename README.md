@@ -45,6 +45,93 @@ class BaseWidget extends ConsumerWidget {
 }
 ```
 
+### BaseStateNotifier
+Abstract StateNotifier class which provides some convenient methods to be used by subclassing it.
+Among execute method which will be explained separately, it provides **showGlobalLoading**, 
+**clearGlobalLoading** for handling global loading, **setGlobalFailure** for handling global failure
+and **pushNamed**, **pushReplacementNamed** and **pop** methods to easily access navigation access
+from state notifier subclasses.
+### Execute method
+The main **BaseStateNotifier** method which supports different options for handling the data, 
+failures and loading.
+```dart
+  @protected
+  Future execute(
+    EitherFailureOr<DataState> function, {
+    PreHandleData<DataState>? onDataReceived,
+    PreHandleFailure? onFailureOccurred,
+    bool withLoadingState = true,
+    bool globalLoading = false,
+    bool globalFailure = true,
+  }) async {
+    _setLoading(withLoadingState, globalLoading);
+    final result = await function;
+    result.fold(
+      (failure) => _onFailure(
+        failure.copyWith(uniqueKey: UniqueKey()),
+        onFailureOccurred,
+        withLoadingState,
+        globalFailure,
+      ),
+      (data) => _onData(data, onDataReceived, withLoadingState),
+    );
+  }
+```
+**function** parameter receives method to execute with return value EitherFailureOr<DataState>. 
+**withLoadingState** bool parameter says while calling and waiting **function** to finish, loading state 
+should be set. Similarly, **globalLoading** bool parameter says while calling and waiting **function** 
+to finish, loading over the the whole app should be shown.
+**globalFailure** bool parameter says if **function** returns Failure, should it be shown globally 
+over the whole app or not.
+&nbsp;
+
+To filter and control which data will update the state, **onDataReceived** callback can be passed. 
+Alternatively, if callback always return false, custom data handling can be implemented.
+&nbsp;
+
+To filter and control which failure will update the state or be shown globally, **onFailureOccurred** 
+callback can be passed. Similar to **onDataReceived** if always returned false, custom failure 
+handling can be implemented.
+
+## _onData method
+Private method being called by **execute** method when **function** returns data. It will call
+**onDataReceived** callback and based on the result call _unsetLoading method and update the state 
+with the data.
+```dart
+  void _onData(
+    DataState data,
+    PreHandleData<DataState>? onDataReceived,
+    bool withLoadingState,
+  ) {
+    final shouldUpdateState = onDataReceived?.call(data) ?? true;
+    _unsetLoading(shouldUpdateState ? false : withLoadingState);
+    if (shouldUpdateState) {
+      state = BaseState.data(data);
+    }
+  }
+```
+
+## _onFailure method
+Private method being called by **execute** method when **function** returns Failure. It will call
+**onFailureOccurred** callback and based on the result call **_unsetLoading** method or not and
+show the failure globally or update the state with it.
+```dart
+  void _onFailure(
+    Failure failure,
+    PreHandleFailure? onFailureOccurred,
+    bool withLoadingState,
+    bool globalFailure,
+  ) {
+    final shouldProceedWithFailure = onFailureOccurred?.call(failure) ?? true;
+    if (!shouldProceedWithFailure || globalFailure) {
+      _unsetLoading(withLoadingState);
+    }
+    if (shouldProceedWithFailure) {
+      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
+    }
+  }
+```
+
 ### Loading
 
 **globalLoadingProvider** can be used to show the loading indicator without updating
