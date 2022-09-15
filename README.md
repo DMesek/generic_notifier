@@ -7,8 +7,14 @@ Uses **[Riverpod package](https://pub.dev/packages/riverpod)**.
 
 ## Table of contents
 - [Real life example](#real-life-example)
-- [BaseState<State, OtherStates>](#baseState<state,-otherStates>)
+- [BaseState<State, OtherStates>](#basestatestate-otherstates)
 - [BaseStateNotifier](#basestatenotifier)
+- [Global loading](#global-loading)
+- [Global failure](#global-failure)
+- [Navigation](#navigation)
+- [BaseWidget](#basewidget)
+- [Changes to switch to AutoRoute package](#changes-to-switch-to-autoroute-package)
+- [Changes to switch to GoRouter package](#changes-to-switch-to-go_router-package)
 
 ## Real life example
 
@@ -152,7 +158,7 @@ To filter and control which failure will update the state or be shown globally, 
 callback can be passed. Similar to **onDataReceived** if always returned false, custom failure
 handling can be implemented.
 
-## Loading
+## Global loading
 
 **globalLoadingProvider** can be used to show the loading indicator without updating
 **BaseStateNotifier** state.
@@ -191,7 +197,7 @@ Future getSomeString() =>
 //...
 ```
 
-## Global failures
+## Global failure
 
 **globalFailureProvider** can be used to show the failure that happened in the application without
 updating **BaseStateNotifier** state.
@@ -317,7 +323,7 @@ class BaseWidget extends ConsumerWidget {
 }
 ```
 
-## Changes needed for AutoRoute package:
+## Changes to switch to AutoRoute package
 
 1. add auto_route dependency to pubspec.yaml
 2. create app_router.dart file, define AppRouter class with options defined in its documentation
@@ -345,7 +351,7 @@ class BaseWidget extends ConsumerWidget {
 
 &nbsp;
 
-## Changes needed for go_router package:
+## Changes to switch to go_router package:
 
 1. add go_router dependency to pubspec.yaml
 
