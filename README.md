@@ -82,7 +82,7 @@ class OtherStateExample with _$OtherStateExample {
 
   const factory OtherStateExample.fetching() = _Fetching;
 
-  const factory OtherStateExample.customError() = _CustomError;
+  const factory OtherStateExample.customError(Failure failure) = _CustomError;
 }
 ```
 ## Real life example
