@@ -14,40 +14,33 @@ class ExampleStateNotifier
 
   ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
 
+  ///Example on how to use additional states
   Future<void> getSomeStringWithOtherState() async {
     state = const BaseState.other(OtherStateExample.fetching());
     execute(
       _exampleRepository.getSomeOtherString(),
       globalLoading: true,
-      withLoadingState: false,
-      //
       onFailureOccurred: (error) {
+        ///Set custom state
         state = BaseState.other(OtherStateExample.customError(error));
+
+        ///Return false because we don't want to update BaseState to BaseState.error
         return false;
       },
       onDataReceived: (_) {
+        ///Set custom state
         state = const BaseState.other(OtherStateExample.empty());
+
+        ///Return false because we don't want to update BaseState to BaseState.data(_)
         return false;
       },
     );
   }
 
+  ///Example of the API request with loading indicator and not changed state
   Future getSomeString() => execute(
         _exampleRepository.getSomeString(),
         globalLoading: true,
-        withLoadingState: true,
+        withLoadingState: false,
       );
-
-  Future getSomeOtherString() => execute(
-        _exampleRepository.getSomeOtherString(),
-        // onDataReceived: _updateOnlyWhenUppercaseFirst,
-        // onFailureOccurred: _emitOnlyServerError,
-        globalLoading: true,
-        withLoadingState: true,
-      );
-
-// bool _updateOnlyWhenUppercaseFirst(String sentence) =>
-//     sentence.startsWith(RegExp('^[A-Z]'));
-//
-// bool _emitOnlyServerError(Failure failure) => failure is GenericError;
 }

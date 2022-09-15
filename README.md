@@ -60,26 +60,44 @@ BaseState has 5 primary states:
 
 @freezed
 class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
-  const factory BaseState.initial() = _Initial;
+   const factory BaseState.initial() = _Initial;
 
-  const factory BaseState.loading() = _Loading;
+   const factory BaseState.loading() = _Loading;
 
-  const factory BaseState.data(State data) = _Data;
+   const factory BaseState.data(State data) = _Data;
 
-  const factory BaseState.other(OtherStates otherStates) = _Other;
+   const factory BaseState.other(OtherStates otherStates) = _Other;
 
-  const factory BaseState.error(Failure failure) = _Error;
+   const factory BaseState.error(Failure failure) = _Error;
+}
+```
+
+
+#### OtherStates example
+
+ ```dart
+@freezed
+class OtherStateExample with _$OtherStateExample {
+  const factory OtherStateExample.empty() = _Empty;
+
+  const factory OtherStateExample.fetching() = _Fetching;
+
+  const factory OtherStateExample.customError() = _CustomError;
 }
 ```
 
 ### BaseStateNotifier
 Abstract StateNotifier class which provides some convenient methods to be used by subclassing it.
-Among execute method which will be explained separately, it provides **showGlobalLoading**, 
-**clearGlobalLoading** for handling global loading, **setGlobalFailure** for handling global failure
-and **pushNamed**, **pushReplacementNamed** and **pop** methods to easily access navigation access
-from state notifier subclasses.
+Among execute method which will be explained separately, it provides:
+
+* **showGlobalLoading** & **clearGlobalLoading** for handling global loading
+
+* **setGlobalFailure** for handling global failure
+
+* **pushNamed**, **pushReplacementNamed** & **pop** methods to easily access navigation access
+  from state notifier subclasses.
 ### Execute method
-The main **BaseStateNotifier** method which supports different options for handling the data, 
+The main **BaseStateNotifier** method which supports different options for handling the data,
 failures and loading.
 ```dart
   @protected
@@ -104,38 +122,41 @@ failures and loading.
     );
   }
 ```
-**function** parameter receives method to execute with return value EitherFailureOr<DataState>. 
-**withLoadingState** bool parameter says while calling and waiting **function** to finish, loading state 
-should be set. Similarly, **globalLoading** bool parameter says while calling and waiting **function** 
-to finish, loading over the the whole app should be shown.
-**globalFailure** bool parameter says if **function** returns Failure, should it be shown globally 
-over the whole app or not.
-&nbsp;
+* **function** parameter receives method to execute with return value EitherFailureOr<DataState>.
 
-To filter and control which data will update the state, **onDataReceived** callback can be passed. 
+* **withLoadingState** bool parameter says while calling and waiting **function** to finish, loading state should be set.
+
+*  **globalLoading** bool parameter says while calling and waiting **function**
+   to finish, loading over the the whole app should be shown.
+
+* **globalFailure** bool parameter says if **function** returns Failure, should it be shown globally
+  over the whole app or not.
+  &nbsp;
+
+To filter and control which data will update the state, **onDataReceived** callback can be passed.
 Alternatively, if callback always return false, custom data handling can be implemented.
 &nbsp;
 
-To filter and control which failure will update the state or be shown globally, **onFailureOccurred** 
-callback can be passed. Similar to **onDataReceived** if always returned false, custom failure 
+To filter and control which failure will update the state or be shown globally, **onFailureOccurred**
+callback can be passed. Similar to **onDataReceived** if always returned false, custom failure
 handling can be implemented.
 
 ## _onData method
 Private method being called by **execute** method when **function** returns data. It will call
-**onDataReceived** callback and based on the result call _unsetLoading method and update the state 
+**onDataReceived** callback and based on the result call _unsetLoading method and update the state
 with the data.
 ```dart
   void _onData(
-    DataState data,
-    PreHandleData<DataState>? onDataReceived,
-    bool withLoadingState,
-  ) {
-    final shouldUpdateState = onDataReceived?.call(data) ?? true;
-    _unsetLoading(shouldUpdateState ? false : withLoadingState);
-    if (shouldUpdateState) {
+        DataState data,
+        PreHandleData<DataState>? onDataReceived,
+        bool withLoadingState,
+        ) {
+   final shouldUpdateState = onDataReceived?.call(data) ?? true;
+   _unsetLoading(shouldUpdateState ? false : withLoadingState);
+   if (shouldUpdateState) {
       state = BaseState.data(data);
-    }
-  }
+   }
+}
 ```
 
 ## _onFailure method
@@ -144,19 +165,19 @@ Private method being called by **execute** method when **function** returns Fail
 show the failure globally or update the state with it.
 ```dart
   void _onFailure(
-    Failure failure,
-    PreHandleFailure? onFailureOccurred,
-    bool withLoadingState,
-    bool globalFailure,
-  ) {
-    final shouldProceedWithFailure = onFailureOccurred?.call(failure) ?? true;
-    if (!shouldProceedWithFailure || globalFailure) {
+        Failure failure,
+        PreHandleFailure? onFailureOccurred,
+        bool withLoadingState,
+        bool globalFailure,
+        ) {
+   final shouldProceedWithFailure = onFailureOccurred?.call(failure) ?? true;
+   if (!shouldProceedWithFailure || globalFailure) {
       _unsetLoading(withLoadingState);
-    }
-    if (shouldProceedWithFailure) {
+   }
+   if (shouldProceedWithFailure) {
       globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
-    }
-  }
+   }
+}
 ```
 
 ### Loading
