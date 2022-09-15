@@ -15,31 +15,31 @@ The entire app is wrapped in **BaseWidget** which listens to  **globalFailureLis
 ```dart
 
 class BaseWidget extends ConsumerWidget {
-   final Widget child;
+  final Widget child;
 
-   const BaseWidget({
-      Key? key,
-      required this.child,
-   }) : super(key: key);
+  const BaseWidget({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
 
-   @override
-   Widget build(BuildContext context, WidgetRef ref) {
-      ref.globalFailureListener(context);
-      ref.globalNavigationListener(ref.read(baseRouterProvider));
-      final showLoading = ref.watch(globalLoadingProvider);
-      return Stack(
-         children: [
-            Scaffold(
-               body: child,
-               floatingActionButton: FloatingActionButton(
-                  onPressed: () =>
-                          ref.read(exampleNotifierProvider.notifier).getSomeString(),
-               ),
-            ),
-            if (showLoading) const BaseLoadingIndicator(),
-         ],
-      );
-   }
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.globalFailureListener(context);
+    ref.globalNavigationListener(ref.read(baseRouterProvider));
+    final showLoading = ref.watch(globalLoadingProvider);
+    return Stack(
+      children: [
+        Scaffold(
+          body: child,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () =>
+                ref.read(exampleNotifierProvider.notifier).getSomeString(),
+          ),
+        ),
+        if (showLoading) const BaseLoadingIndicator(),
+      ],
+    );
+  }
 }
 ```
 
@@ -60,15 +60,15 @@ BaseState has 5 primary states:
 
 @freezed
 class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
-   const factory BaseState.initial() = _Initial;
+  const factory BaseState.initial() = _Initial;
 
-   const factory BaseState.loading() = _Loading;
+  const factory BaseState.loading() = _Loading;
 
-   const factory BaseState.data(State data) = _Data;
+  const factory BaseState.data(State data) = _Data;
 
-   const factory BaseState.other(OtherStates otherStates) = _Other;
+  const factory BaseState.other(OtherStates otherStates) = _Other;
 
-   const factory BaseState.error(Failure failure) = _Error;
+  const factory BaseState.error(Failure failure) = _Error;
 }
 ```
 
@@ -85,6 +85,53 @@ class OtherStateExample with _$OtherStateExample {
   const factory OtherStateExample.customError() = _CustomError;
 }
 ```
+## Real life example
+
+ ```dart
+
+final exampleNotifierProvider = StateNotifierProvider<ExampleStateNotifier,
+    BaseState<String, OtherStateExample>>(
+  (ref) => ExampleStateNotifier(SentenceRepository(), ref.read),
+);
+
+class ExampleStateNotifier
+    extends BaseStateNotifier<String, OtherStateExample> {
+  final ExampleRepository _exampleRepository;
+
+  ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
+
+  ///Example on how to use additional states
+  Future<void> getSomeStringWithOtherState() async {
+    state = const BaseState.other(OtherStateExample.fetching());
+    execute(
+      _exampleRepository.getSomeOtherString(),
+      globalLoading: true,
+      onFailureOccurred: (error) {
+        //Set custom state
+        state = BaseState.other(OtherStateExample.customError(error));
+        //Return false because we don't want to update BaseState to BaseState.error
+        return false;
+      },
+      onDataReceived: (_) {
+        //Set custom state
+        state = const BaseState.other(OtherStateExample.empty());
+        //Return false because we don't want to update BaseState to BaseState.data(_)
+        return false;
+      },
+    );
+  }
+
+  ///Example of the API request with loading indicator and not changed state
+  Future getSomeString() => execute(
+        _exampleRepository.getSomeString(),
+        globalLoading: true,
+        withLoadingState: false,
+      );
+}
+
+
+```
+
 
 ### BaseStateNotifier
 Abstract StateNotifier class which provides some convenient methods to be used by subclassing it.
@@ -101,26 +148,26 @@ The main **BaseStateNotifier** method which supports different options for handl
 failures and loading.
 ```dart
   @protected
-  Future execute(
+Future execute(
     EitherFailureOr<DataState> function, {
-    PreHandleData<DataState>? onDataReceived,
-    PreHandleFailure? onFailureOccurred,
-    bool withLoadingState = true,
-    bool globalLoading = false,
-    bool globalFailure = true,
-  }) async {
-    _setLoading(withLoadingState, globalLoading);
-    final result = await function;
-    result.fold(
-      (failure) => _onFailure(
-        failure.copyWith(uniqueKey: UniqueKey()),
-        onFailureOccurred,
-        withLoadingState,
-        globalFailure,
-      ),
-      (data) => _onData(data, onDataReceived, withLoadingState),
-    );
-  }
+      PreHandleData<DataState>? onDataReceived,
+      PreHandleFailure? onFailureOccurred,
+      bool withLoadingState = true,
+      bool globalLoading = false,
+      bool globalFailure = true,
+    }) async {
+  _setLoading(withLoadingState, globalLoading);
+  final result = await function;
+  result.fold(
+        (failure) => _onFailure(
+      failure.copyWith(uniqueKey: UniqueKey()),
+      onFailureOccurred,
+      withLoadingState,
+      globalFailure,
+    ),
+        (data) => _onData(data, onDataReceived, withLoadingState),
+  );
+}
 ```
 * **function** parameter receives method to execute with return value EitherFailureOr<DataState>.
 
@@ -147,15 +194,15 @@ Private method being called by **execute** method when **function** returns data
 with the data.
 ```dart
   void _onData(
-        DataState data,
-        PreHandleData<DataState>? onDataReceived,
-        bool withLoadingState,
-        ) {
-   final shouldUpdateState = onDataReceived?.call(data) ?? true;
-   _unsetLoading(shouldUpdateState ? false : withLoadingState);
-   if (shouldUpdateState) {
-      state = BaseState.data(data);
-   }
+    DataState data,
+    PreHandleData<DataState>? onDataReceived,
+    bool withLoadingState,
+    ) {
+  final shouldUpdateState = onDataReceived?.call(data) ?? true;
+  _unsetLoading(shouldUpdateState ? false : withLoadingState);
+  if (shouldUpdateState) {
+    state = BaseState.data(data);
+  }
 }
 ```
 
@@ -165,18 +212,18 @@ Private method being called by **execute** method when **function** returns Fail
 show the failure globally or update the state with it.
 ```dart
   void _onFailure(
-        Failure failure,
-        PreHandleFailure? onFailureOccurred,
-        bool withLoadingState,
-        bool globalFailure,
-        ) {
-   final shouldProceedWithFailure = onFailureOccurred?.call(failure) ?? true;
-   if (!shouldProceedWithFailure || globalFailure) {
-      _unsetLoading(withLoadingState);
-   }
-   if (shouldProceedWithFailure) {
-      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
-   }
+    Failure failure,
+    PreHandleFailure? onFailureOccurred,
+    bool withLoadingState,
+    bool globalFailure,
+    ) {
+  final shouldProceedWithFailure = onFailureOccurred?.call(failure) ?? true;
+  if (!shouldProceedWithFailure || globalFailure) {
+    _unsetLoading(withLoadingState);
+  }
+  if (shouldProceedWithFailure) {
+    globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
+  }
 }
 ```
 
@@ -198,10 +245,10 @@ final globalLoadingProvider = StateProvider<bool>((_) => false);
 ```dart
 //...
 Future getSomeString() =>
-        execute(
-           _exampleRepository.getSomeString(),
-           globalLoading: true,
-        );
+    execute(
+      _exampleRepository.getSomeString(),
+      globalLoading: true,
+    );
 //...
 ```
 
@@ -211,11 +258,11 @@ You can also change **BaseNotifier** state to BaseState.loading by setting
 ```dart
 //...
 Future getSomeString() =>
-        execute(
-           _exampleRepository.getSomeString(),
-           globalLoading: true,
-           withLoadingState: true,
-        );
+    execute(
+      _exampleRepository.getSomeString(),
+      globalLoading: true,
+      withLoadingState: true,
+    );
 //...
 ```
 
@@ -233,14 +280,14 @@ final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
 ```dart
 void globalFailureListener(BuildContext _) {
-   listen<Failure?>(globalFailureProvider, (_, failure) {
-      if (failure == null) return;
-      //Show global error
-      log('''showing ${failure.isCritical ? '' : 'non-'}critical failure with title ${failure.title},
+  listen<Failure?>(globalFailureProvider, (_, failure) {
+    if (failure == null) return;
+    //Show global error
+    log('''showing ${failure.isCritical ? '' : 'non-'}critical failure with title ${failure.title},
           error: ${failure.error},
           stackTrace: ${failure.stackTrace}
       ''');
-   });
+  });
 }
 ```
 
@@ -254,10 +301,10 @@ not in the overlay as a toast or a dialog.
 ```dart
 //...
 Future getSomeString() =>
-        execute(
-           _exampleRepository.getSomeString(),
-           globalFailure: false,
-        );
+    execute(
+      _exampleRepository.getSomeString(),
+      globalFailure: false,
+    );
 //...
 ```
 
@@ -274,10 +321,10 @@ triggers **execute** method of **RouteAction** object.
 
 ```dart
 void globalNavigationListener(BaseRouter baseRouter) {
-   listen<RouteAction?>(
-      globalNavigationProvider,
-              (_, state) => state?.execute(baseRouter),
-   );
+  listen<RouteAction?>(
+    globalNavigationProvider,
+        (_, state) => state?.execute(baseRouter),
+  );
 }
 ```
 
@@ -384,4 +431,3 @@ only two mentioned alternatives to Beamer.
 4. remove **BeamerProvider** widget from **main.dart**
 
 &nbsp;
-
