@@ -46,15 +46,17 @@ class BaseWidget extends ConsumerWidget {
 ### BaseState<State, OtherStates>
 
 BaseState has 5 primary states:
-1. **Initial**
+1. **initial**
 
-2. **Loading**
+2. **loading**
 
-3. **Data** - ex. Used for showing successful API call response
+3. **data(State)** - ex. Used for showing successful API call response
 
-4. **Other** - Used if you want to have more then 5 primary states
+4. **other(OtherStates)** - Used if you want to have more then 5 primary states
 
-5. **Error**
+5. **error(Failure)**
+
+**State** has to be the same type as the return value from the function that is called
 
 ```dart
 
@@ -75,6 +77,8 @@ class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
 
 #### OtherStates example
 
+Define as many additional states that are needed
+
  ```dart
 @freezed
 class OtherStateExample with _$OtherStateExample {
@@ -86,6 +90,8 @@ class OtherStateExample with _$OtherStateExample {
 }
 ```
 ## Real life example
+
+In this example **State** is **String** and **OtherState** is **OtherStateExample**.
 
  ```dart
 
