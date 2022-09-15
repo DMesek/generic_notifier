@@ -33,7 +33,7 @@ class ExamplePage extends ConsumerWidget {
               onPressed: ref
                   .read(exampleNotifierProvider.notifier)
                   .getSomeStringWithOtherState,
-              child: const Text('Other state sexample'),
+              child: const Text('Other state example'),
             ),
             TextButton(
               onPressed:

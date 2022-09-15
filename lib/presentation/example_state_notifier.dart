@@ -41,6 +41,7 @@ class ExampleStateNotifier
         ///Return false because we don't want to update BaseState to BaseState.data(_)
         return false;
       },
+      withLoadingState: false,
     );
   }
 }
