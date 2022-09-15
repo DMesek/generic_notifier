@@ -5,90 +5,11 @@ global loading, error handling and route navigation.
 
 Uses **[Riverpod package](https://pub.dev/packages/riverpod)**.
 
-## Usage
+## Table of contents
+- [Real life example](#real-life-example)
+- [BaseState<State, OtherStates>](#baseState<state,-otherStates>)
+- [BaseStateNotifier](#basestatenotifier)
 
-### BaseWidget
-
-The entire app is wrapped in **BaseWidget** which listens to  **globalFailureListener**,
-**globalNavigationProvider** & **globalFailureProvider**.
-
-```dart
-
-class BaseWidget extends ConsumerWidget {
-  final Widget child;
-
-  const BaseWidget({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.globalFailureListener(context);
-    ref.globalNavigationListener(ref.read(baseRouterProvider));
-    final showLoading = ref.watch(globalLoadingProvider);
-    return Stack(
-      children: [
-        Scaffold(
-          body: child,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                ref.read(exampleNotifierProvider.notifier).getSomeString(),
-          ),
-        ),
-        if (showLoading) const BaseLoadingIndicator(),
-      ],
-    );
-  }
-}
-```
-
-### BaseState<State, OtherStates>
-
-BaseState has 5 primary states:
-1. **initial**
-
-2. **loading**
-
-3. **data(State)** - ex. Used for showing successful API call response
-
-4. **other(OtherStates)** - Used if you want to have more then 5 primary states
-
-5. **error(Failure)**
-
-**State** has to be the same type as the return value from the function that is called
-
-```dart
-
-@freezed
-class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
-  const factory BaseState.initial() = _Initial;
-
-  const factory BaseState.loading() = _Loading;
-
-  const factory BaseState.data(State data) = _Data;
-
-  const factory BaseState.other(OtherStates otherStates) = _Other;
-
-  const factory BaseState.error(Failure failure) = _Error;
-}
-```
-
-
-#### OtherStates example
-
-Define as many additional states that are needed
-
- ```dart
-@freezed
-class OtherStateExample with _$OtherStateExample {
-  const factory OtherStateExample.empty() = _Empty;
-
-  const factory OtherStateExample.fetching() = _Fetching;
-
-  const factory OtherStateExample.customError(Failure failure) = _CustomError;
-}
-```
 ## Real life example
 
 In this example **State** is **String** and **OtherState** is **OtherStateExample**.
@@ -139,11 +60,56 @@ class ExampleStateNotifier
   }
 }
 
+```
 
+## BaseState<State, OtherStates>
+
+BaseState has 5 primary states:
+1. **initial**
+
+2. **loading**
+
+3. **data(State)** - ex. Used for showing successful API call response
+
+4. **other(OtherStates)** - Used if you want to have more then 5 primary states
+
+5. **error(Failure)**
+
+**State** has to be the same type as the return value from the function that is called
+
+```dart
+
+@freezed
+class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
+  const factory BaseState.initial() = _Initial;
+
+  const factory BaseState.loading() = _Loading;
+
+  const factory BaseState.data(State data) = _Data;
+
+  const factory BaseState.other(OtherStates otherStates) = _Other;
+
+  const factory BaseState.error(Failure failure) = _Error;
+}
 ```
 
 
-### BaseStateNotifier
+### OtherStates example
+
+Define as many additional states that are needed
+
+ ```dart
+@freezed
+class OtherStateExample with _$OtherStateExample {
+  const factory OtherStateExample.empty() = _Empty;
+
+  const factory OtherStateExample.fetching() = _Fetching;
+
+  const factory OtherStateExample.customError(Failure failure) = _CustomError;
+}
+```
+
+## BaseStateNotifier
 Abstract StateNotifier class which provides some convenient methods to be used by subclassing it.
 Among execute method which will be explained separately, it provides:
 
@@ -158,26 +124,14 @@ The main **BaseStateNotifier** method which supports different options for handl
 failures and loading.
 ```dart
   @protected
-Future execute(
+  Future execute(
     EitherFailureOr<DataState> function, {
       PreHandleData<DataState>? onDataReceived,
       PreHandleFailure? onFailureOccurred,
       bool withLoadingState = true,
       bool globalLoading = false,
       bool globalFailure = true,
-    }) async {
-  _setLoading(withLoadingState, globalLoading);
-  final result = await function;
-  result.fold(
-        (failure) => _onFailure(
-      failure.copyWith(uniqueKey: UniqueKey()),
-      onFailureOccurred,
-      withLoadingState,
-      globalFailure,
-    ),
-        (data) => _onData(data, onDataReceived, withLoadingState),
-  );
-}
+    });
 ```
 * **function** parameter receives method to execute with return value EitherFailureOr<DataState>.
 
@@ -198,46 +152,7 @@ To filter and control which failure will update the state or be shown globally, 
 callback can be passed. Similar to **onDataReceived** if always returned false, custom failure
 handling can be implemented.
 
-## _onData method
-Private method being called by **execute** method when **function** returns data. It will call
-**onDataReceived** callback and based on the result call _unsetLoading method and update the state
-with the data.
-```dart
-  void _onData(
-    DataState data,
-    PreHandleData<DataState>? onDataReceived,
-    bool withLoadingState,
-    ) {
-  final shouldUpdateState = onDataReceived?.call(data) ?? true;
-  _unsetLoading(shouldUpdateState ? false : withLoadingState);
-  if (shouldUpdateState) {
-    state = BaseState.data(data);
-  }
-}
-```
-
-## _onFailure method
-Private method being called by **execute** method when **function** returns Failure. It will call
-**onFailureOccurred** callback and based on the result call **_unsetLoading** method or not and
-show the failure globally or update the state with it.
-```dart
-  void _onFailure(
-    Failure failure,
-    PreHandleFailure? onFailureOccurred,
-    bool withLoadingState,
-    bool globalFailure,
-    ) {
-  final shouldProceedWithFailure = onFailureOccurred?.call(failure) ?? true;
-  if (!shouldProceedWithFailure || globalFailure) {
-    _unsetLoading(withLoadingState);
-  }
-  if (shouldProceedWithFailure) {
-    globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
-  }
-}
-```
-
-### Loading
+## Loading
 
 **globalLoadingProvider** can be used to show the loading indicator without updating
 **BaseStateNotifier** state.
@@ -276,7 +191,7 @@ Future getSomeString() =>
 //...
 ```
 
-### Global failures
+## Global failures
 
 **globalFailureProvider** can be used to show the failure that happened in the application without
 updating **BaseStateNotifier** state.
@@ -286,7 +201,7 @@ updating **BaseStateNotifier** state.
 final globalFailureProvider = StateProvider<Failure?>((_) => null);
 ```
 
-### How it works
+### Global failure listener
 
 ```dart
 void globalFailureListener(BuildContext _) {
@@ -318,7 +233,7 @@ Future getSomeString() =>
 //...
 ```
 
-### Navigation
+## Navigation
 
 **globalNavigationProvider** with **RouteAction** type can be used to execute push, pop and similar
 navigation actions. Navigation can be used directly by updating **globalNavigationProvider** or by
@@ -327,7 +242,7 @@ using descendant of **BaseStateNotifier** which initially provides **pushNamed**
 **BaseWidget** registers listener for **globalNavigationProvider** and therefore any change
 triggers **execute** method of **RouteAction** object.
 
-### How it works
+### Global navigation listener
 
 ```dart
 void globalNavigationListener(BaseRouter baseRouter) {
@@ -366,9 +281,43 @@ If necessary, by making few changes navigation package can be easily switched to
 **GoRouter** or probably any other navigation package but here short notes will be provided for
 only two mentioned alternatives to Beamer.
 
-&nbsp;
+## BaseWidget
 
-### Changes needed for AutoRoute package:
+The entire app is wrapped in **BaseWidget** which listens to  **globalFailureListener**,
+**globalNavigationProvider** & **globalFailureProvider**.
+
+```dart
+
+class BaseWidget extends ConsumerWidget {
+  final Widget child;
+
+  const BaseWidget({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.globalFailureListener(context);
+    ref.globalNavigationListener(ref.read(baseRouterProvider));
+    final showLoading = ref.watch(globalLoadingProvider);
+    return Stack(
+      children: [
+        Scaffold(
+          body: child,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () =>
+                ref.read(exampleNotifierProvider.notifier).getSomeString(),
+          ),
+        ),
+        if (showLoading) const BaseLoadingIndicator(),
+      ],
+    );
+  }
+}
+```
+
+## Changes needed for AutoRoute package:
 
 1. add auto_route dependency to pubspec.yaml
 2. create app_router.dart file, define AppRouter class with options defined in its documentation
@@ -396,7 +345,7 @@ only two mentioned alternatives to Beamer.
 
 &nbsp;
 
-### Changes needed for go_router package:
+## Changes needed for go_router package:
 
 1. add go_router dependency to pubspec.yaml
 
