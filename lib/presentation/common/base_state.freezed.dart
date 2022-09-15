@@ -816,21 +816,21 @@ mixin _$OtherStateExample {
   TResult when<TResult extends Object?>({
     required TResult Function() empty,
     required TResult Function() fetching,
-    required TResult Function() customError,
+    required TResult Function(Failure failure) customError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -915,7 +915,7 @@ class _$_Empty implements _Empty {
   TResult when<TResult extends Object?>({
     required TResult Function() empty,
     required TResult Function() fetching,
-    required TResult Function() customError,
+    required TResult Function(Failure failure) customError,
   }) {
     return empty();
   }
@@ -925,7 +925,7 @@ class _$_Empty implements _Empty {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
   }) {
     return empty?.call();
   }
@@ -935,7 +935,7 @@ class _$_Empty implements _Empty {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
     required TResult orElse(),
   }) {
     if (empty != null) {
@@ -1026,7 +1026,7 @@ class _$_Fetching implements _Fetching {
   TResult when<TResult extends Object?>({
     required TResult Function() empty,
     required TResult Function() fetching,
-    required TResult Function() customError,
+    required TResult Function(Failure failure) customError,
   }) {
     return fetching();
   }
@@ -1036,7 +1036,7 @@ class _$_Fetching implements _Fetching {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
   }) {
     return fetching?.call();
   }
@@ -1046,7 +1046,7 @@ class _$_Fetching implements _Fetching {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
     required TResult orElse(),
   }) {
     if (fetching != null) {
@@ -1099,6 +1099,7 @@ abstract class _$$_CustomErrorCopyWith<$Res> {
   factory _$$_CustomErrorCopyWith(
           _$_CustomError value, $Res Function(_$_CustomError) then) =
       __$$_CustomErrorCopyWithImpl<$Res>;
+  $Res call({Failure failure});
 }
 
 /// @nodoc
@@ -1111,35 +1112,58 @@ class __$$_CustomErrorCopyWithImpl<$Res>
 
   @override
   _$_CustomError get _value => super._value as _$_CustomError;
+
+  @override
+  $Res call({
+    Object? failure = freezed,
+  }) {
+    return _then(_$_CustomError(
+      failure == freezed
+          ? _value.failure
+          : failure // ignore: cast_nullable_to_non_nullable
+              as Failure,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_CustomError implements _CustomError {
-  const _$_CustomError();
+  const _$_CustomError(this.failure);
+
+  @override
+  final Failure failure;
 
   @override
   String toString() {
-    return 'OtherStateExample.customError()';
+    return 'OtherStateExample.customError(failure: $failure)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_CustomError);
+        (other.runtimeType == runtimeType &&
+            other is _$_CustomError &&
+            const DeepCollectionEquality().equals(other.failure, failure));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(failure));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_CustomErrorCopyWith<_$_CustomError> get copyWith =>
+      __$$_CustomErrorCopyWithImpl<_$_CustomError>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() empty,
     required TResult Function() fetching,
-    required TResult Function() customError,
+    required TResult Function(Failure failure) customError,
   }) {
-    return customError();
+    return customError(failure);
   }
 
   @override
@@ -1147,9 +1171,9 @@ class _$_CustomError implements _CustomError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
   }) {
-    return customError?.call();
+    return customError?.call(failure);
   }
 
   @override
@@ -1157,11 +1181,11 @@ class _$_CustomError implements _CustomError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? empty,
     TResult Function()? fetching,
-    TResult Function()? customError,
+    TResult Function(Failure failure)? customError,
     required TResult orElse(),
   }) {
     if (customError != null) {
-      return customError();
+      return customError(failure);
     }
     return orElse();
   }
@@ -1202,5 +1226,10 @@ class _$_CustomError implements _CustomError {
 }
 
 abstract class _CustomError implements OtherStateExample {
-  const factory _CustomError() = _$_CustomError;
+  const factory _CustomError(final Failure failure) = _$_CustomError;
+
+  Failure get failure;
+  @JsonKey(ignore: true)
+  _$$_CustomErrorCopyWith<_$_CustomError> get copyWith =>
+      throw _privateConstructorUsedError;
 }

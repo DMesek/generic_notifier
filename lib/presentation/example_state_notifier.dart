@@ -20,8 +20,9 @@ class ExampleStateNotifier
       _exampleRepository.getSomeOtherString(),
       globalLoading: true,
       withLoadingState: false,
-      onFailureOccurred: (_) {
-        state = const BaseState.other(OtherStateExample.customError());
+      //
+      onFailureOccurred: (error) {
+        state = BaseState.other(OtherStateExample.customError(error));
         return false;
       },
       onDataReceived: (_) {

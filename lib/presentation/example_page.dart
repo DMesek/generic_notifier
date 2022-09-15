@@ -23,7 +23,7 @@ class ExamplePage extends ConsumerWidget {
                 other: (otherState) => otherState.when(
                   empty: () => 'Empty',
                   fetching: () => 'Fetching',
-                  customError: () => 'Custom error',
+                  customError: (error) => 'Custom error: ${error.title}',
                 ),
                 initial: () => 'Initial',
                 error: (failure) => failure.toString(),

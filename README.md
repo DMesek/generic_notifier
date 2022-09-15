@@ -15,31 +15,60 @@ The entire app is wrapped in **BaseWidget** which listens to  **globalFailureLis
 ```dart
 
 class BaseWidget extends ConsumerWidget {
-  final Widget child;
+   final Widget child;
 
-  const BaseWidget({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+   const BaseWidget({
+      Key? key,
+      required this.child,
+   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.globalFailureListener(context);
-    ref.globalNavigationListener(ref.read(baseRouterProvider));
-    final showLoading = ref.watch(globalLoadingProvider);
-    return Stack(
-      children: [
-        Scaffold(
-          body: child,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                ref.read(exampleNotifierProvider.notifier).getSomeString(),
-          ),
-        ),
-        if (showLoading) const BaseLoadingIndicator(),
-      ],
-    );
-  }
+   @override
+   Widget build(BuildContext context, WidgetRef ref) {
+      ref.globalFailureListener(context);
+      ref.globalNavigationListener(ref.read(baseRouterProvider));
+      final showLoading = ref.watch(globalLoadingProvider);
+      return Stack(
+         children: [
+            Scaffold(
+               body: child,
+               floatingActionButton: FloatingActionButton(
+                  onPressed: () =>
+                          ref.read(exampleNotifierProvider.notifier).getSomeString(),
+               ),
+            ),
+            if (showLoading) const BaseLoadingIndicator(),
+         ],
+      );
+   }
+}
+```
+
+### BaseState<State, OtherStates>
+
+BaseState has 5 primary states:
+1. **Initial**
+
+2. **Loading**
+
+3. **Data** - ex. Used for showing successful API call response
+
+4. **Other** - Used if you want to have more then 5 primary states
+
+5. **Error**
+
+```dart
+
+@freezed
+class BaseState<State, OtherStates> with _$BaseState<State, OtherStates> {
+  const factory BaseState.initial() = _Initial;
+
+  const factory BaseState.loading() = _Loading;
+
+  const factory BaseState.data(State data) = _Data;
+
+  const factory BaseState.other(OtherStates otherStates) = _Other;
+
+  const factory BaseState.error(Failure failure) = _Error;
 }
 ```
 
@@ -61,10 +90,10 @@ final globalLoadingProvider = StateProvider<bool>((_) => false);
 ```dart
 //...
 Future getSomeString() =>
-    execute(
-      _exampleRepository.getSomeString(),
-      globalLoading: true,
-    );
+        execute(
+           _exampleRepository.getSomeString(),
+           globalLoading: true,
+        );
 //...
 ```
 
@@ -74,11 +103,11 @@ You can also change **BaseNotifier** state to BaseState.loading by setting
 ```dart
 //...
 Future getSomeString() =>
-    execute(
-      _exampleRepository.getSomeString(),
-      globalLoading: true,
-      withLoadingState: true,
-    );
+        execute(
+           _exampleRepository.getSomeString(),
+           globalLoading: true,
+           withLoadingState: true,
+        );
 //...
 ```
 
@@ -96,14 +125,14 @@ final globalFailureProvider = StateProvider<Failure?>((_) => null);
 
 ```dart
 void globalFailureListener(BuildContext _) {
-  listen<Failure?>(globalFailureProvider, (_, failure) {
-    if (failure == null) return;
-    //Show global error
-    log('''showing ${failure.isCritical ? '' : 'non-'}critical failure with title ${failure.title},
+   listen<Failure?>(globalFailureProvider, (_, failure) {
+      if (failure == null) return;
+      //Show global error
+      log('''showing ${failure.isCritical ? '' : 'non-'}critical failure with title ${failure.title},
           error: ${failure.error},
           stackTrace: ${failure.stackTrace}
       ''');
-  });
+   });
 }
 ```
 
@@ -117,10 +146,10 @@ not in the overlay as a toast or a dialog.
 ```dart
 //...
 Future getSomeString() =>
-    execute(
-      _exampleRepository.getSomeString(),
-      globalFailure: false,
-    );
+        execute(
+           _exampleRepository.getSomeString(),
+           globalFailure: false,
+        );
 //...
 ```
 
@@ -137,10 +166,10 @@ triggers **execute** method of **RouteAction** object.
 
 ```dart
 void globalNavigationListener(BaseRouter baseRouter) {
-  listen<RouteAction?>(
-    globalNavigationProvider,
-        (_, state) => state?.execute(baseRouter),
-  );
+   listen<RouteAction?>(
+      globalNavigationProvider,
+              (_, state) => state?.execute(baseRouter),
+   );
 }
 ```
 
