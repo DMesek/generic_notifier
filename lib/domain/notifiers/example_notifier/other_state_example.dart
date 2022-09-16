@@ -1,5 +1,8 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:reusability/domain/failure.dart';
+
+import '../../failure.dart';
 
 part 'other_state_example.freezed.dart';
 
