@@ -123,8 +123,6 @@ Among execute method which will be explained separately, it provides:
 
 * **setGlobalFailure** for handling global failure
 
-* **pushNamed**, **pushReplacementNamed** & **pop** methods to easily access navigation access
-  from state notifier subclasses.
 ### Execute method
 The main **BaseStateNotifier** method which supports different options for handling the data,
 failures and loading.
@@ -243,7 +241,7 @@ Future getSomeString() =>
 
 **globalNavigationProvider** with **RouteAction** type can be used to execute push, pop and similar
 navigation actions. Navigation can be used directly by updating **globalNavigationProvider** or by
-using descendant of **BaseStateNotifier** which initially provides **pushNamed**,
+using extension on WidgetRef class which initially provides **pushNamed**,
 **pushReplacementNamed** and **pop** methods.
 **BaseWidget** registers listener for **globalNavigationProvider** and therefore any change
 triggers **execute** method of **RouteAction** object.
@@ -251,10 +249,10 @@ triggers **execute** method of **RouteAction** object.
 ### Global navigation listener
 
 ```dart
-void globalNavigationListener(BaseRouter baseRouter) {
+void globalNavigationListener() {
   listen<RouteAction?>(
     globalNavigationProvider,
-        (_, state) => state?.execute(baseRouter),
+        (_, state) => state?.execute(read(baseRouterProvider)),
   );
 }
 ```
@@ -262,18 +260,14 @@ void globalNavigationListener(BaseRouter baseRouter) {
 To navigate from current to the next page it can be done like this:
 
 ```
-ref.read(currentPageNotifierProvider.notifier).pushNamed(nextPageRouteName);
+ref.pushNamed(nextPageRouteName);
 ```
 
 or to pop back to previous page:
 
 ```
-ref.read(currentPageNotifierProvider.notifier).pop();
+ref.pop();
 ```
-
-Navigator can be used even directly by accessing **globalNavigationProvider** but it is more convenient
-to navigate through descendant of BaseStateNotifier like shown above and that way you don't have to
-instantiate by yourself RouteAction descendant classes.
 
 If more navigation actions are necessary, RouteAction can be subclassed with desired action and new
 method can be added into BaseStateNotifier that will use that class. Also, BaseRouter can be
@@ -305,17 +299,11 @@ class BaseWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.globalFailureListener(context);
-    ref.globalNavigationListener(ref.read(baseRouterProvider));
+    ref.globalNavigationListener();
     final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
       children: [
-        Scaffold(
-          body: child,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                ref.read(exampleNotifierProvider.notifier).getSomeString(),
-          ),
-        ),
+        child,
         if (showLoading) const BaseLoadingIndicator(),
       ],
     );
