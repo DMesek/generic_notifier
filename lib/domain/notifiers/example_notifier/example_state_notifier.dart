@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/data/example_repository.dart';
+import 'package:reusability/domain/notifiers/example_notifier/other_state_example.dart';
 import 'package:reusability/presentation/common/base_state.dart';
 import 'package:reusability/presentation/common/base_state_notifier.dart';
 
