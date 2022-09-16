@@ -37,10 +37,18 @@ class ExamplePage extends ConsumerWidget {
               child: const Text('Other state example'),
             ),
             TextButton(
-              onPressed:
-                  ref.read(exampleNotifierProvider.notifier).getSomeString,
+              onPressed: ref
+                  .read(exampleNotifierProvider.notifier)
+                  .getSomeStringFullExample,
               child: const Text('Get string'),
             ),
+            TextButton(
+              onPressed: ref
+                  .read(exampleNotifierProvider.notifier)
+                  .getSomeStringGlobalLoading,
+              child: const Text('Global loading example'),
+            ),
+            //Navigation example
             TextButton(
               onPressed: () => ref.pushNamed(ExamplePage2.routeName),
               child: const Text('Navigate'),

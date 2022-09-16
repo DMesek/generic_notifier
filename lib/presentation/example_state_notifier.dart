@@ -14,34 +14,61 @@ class ExampleStateNotifier
 
   ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
 
-  ///Example of the API request with loading indicator and not changed state
-  Future getSomeString() => execute(
+  Future getSomeStringFullExample() => execute(
+        //Function that is called. Needs to have the same success return type as State
+        _exampleRepository.getSomeString(),
+
+        //Set to true if you want to handle error globally (ex. Show error dialog above the entire app)
+        globalFailure: true,
+
+        //Set to true if you want to show BaseLoadingIndicator above the entire app
+        globalLoading: false,
+
+        //Set to true if you want to update state to BaseState.loading()
+        withLoadingState: true,
+
+        //Do some actions with data
+        //If you return true, base state will be updated to BaseState.data(data)
+        //If you return false, state will not be updated
+        onDataReceived: (data) {
+          // Custom handle data
+          return true;
+        },
+
+        //Do some actions with failure
+        //If you return true, base state will be updated to BaseState.error(failure)
+        //If you return false, state will not be updated
+        onFailureOccurred: (failure) {
+          // Custom handle data
+          return true;
+        },
+      );
+
+  //Example of the API request with global loading indicator
+  Future getSomeStringGlobalLoading() => execute(
         _exampleRepository.getSomeString(),
         globalLoading: true,
         withLoadingState: false,
       );
 
-  ///Example on how to use additional states
+  //Example on how to use additional states
   Future<void> getSomeStringWithOtherState() async {
     state = const BaseState.other(OtherStateExample.fetching());
     execute(
       _exampleRepository.getSomeOtherString(),
-      globalLoading: true,
+      withLoadingState: false,
       onFailureOccurred: (error) {
-        ///Set custom state
+        //Set custom state
         state = BaseState.other(OtherStateExample.customError(error));
-
-        ///Return false because we don't want to update BaseState to BaseState.error
+        //Return false because we don't want to update BaseState to BaseState.error
         return false;
       },
       onDataReceived: (_) {
-        ///Set custom state
+        //Set custom state
         state = const BaseState.other(OtherStateExample.empty());
-
-        ///Return false because we don't want to update BaseState to BaseState.data(_)
+        //Return false because we don't want to update BaseState to BaseState.data(_)
         return false;
       },
-      withLoadingState: false,
     );
   }
 }
