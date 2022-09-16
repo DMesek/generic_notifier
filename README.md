@@ -42,11 +42,11 @@ class YourStateNotifier
   YourStateNotifier(this._yourRepository, Reader reader) : super(reader);
 
   Future getYourString() => execute(
-        _yourRepository.getYourString(),
-        withLoadingState: true,
-        globalLoading: false,
-        globalFailure: false,
-      );
+    _yourRepository.getYourString(),
+    withLoadingState: true,
+    globalLoading: false,
+    globalFailure: false,
+  );
 }
 ```
 - Create provider for YourStateNotifier and instantiate your repository implementation
@@ -287,7 +287,7 @@ The main **BaseStateNotifier** method which supports different options for handl
 failures and loading.
 ```dart
   @protected
-  Future execute(
+Future execute(
     EitherFailureOr<DataState> function, {
       PreHandleData<DataState>? onDataReceived,
       PreHandleFailure? onFailureOccurred,
@@ -442,8 +442,12 @@ only two mentioned alternatives to Beamer.
 
 ## BaseWidget
 
-The entire app is wrapped in **BaseWidget** which listens to  **globalFailureListener**,
-**globalNavigationProvider** & **globalFailureProvider**.
+The entire app is wrapped in **BaseWidget** which listens to:
+* **globalFailureListener**
+
+* **globalNavigationProvider**
+
+* **globalFailureProvider**.
 
 ```dart
 
