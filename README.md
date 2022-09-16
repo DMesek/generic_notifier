@@ -16,6 +16,10 @@ even switch navigation packages if necessary.
 ### Get started
 - Create your abstract repository and implement it
 ```dart
+final repositoryProvider = Provider<YourRepository>(
+      (_) => YourRepositoryImplementation(),
+); 
+
 abstract class YourRepository {
   EitherFailureOr<String> getYourString();
 }
@@ -49,11 +53,11 @@ class YourStateNotifier
   );
 }
 ```
-- Create provider for YourStateNotifier and instantiate your repository implementation
+- Create provider for YourStateNotifier
 ```dart
 final yourNotifierProvider = StateNotifierProvider<YourStateNotifier,
     BaseState<String, OtherState>>(
-      (ref) => YourStateNotifier(YourRepositoryImplementation(), ref.read),
+      (ref) => YourStateNotifier(ref.read(repositoryProvider), ref.read),
 ); 
 ```
 - In your widget call your notifier getYourString() method through your provider and watch for the changes
