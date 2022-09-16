@@ -56,7 +56,7 @@ final yourNotifierProvider = StateNotifierProvider<YourStateNotifier,
       (ref) => YourStateNotifier(YourRepositoryImplementation(), ref.read),
 ); 
 ```
-- In your widget call your provider and watch for the changes
+- In your widget call your notifier getYourString() method through your provider and watch for the changes
 ```
     ref.read(yourNotifierProvider.notifier).getYourString();
     final state = ref.watch(yourNotifierProvider);
