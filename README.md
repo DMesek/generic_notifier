@@ -1,9 +1,102 @@
 # Generic notifier
 
-Generic notifier which every notifier should extend to avoid writing repetitive code and to access
-global loading, error handling and route navigation.
+Generic notifier which every notifier should extend to avoid writing repetitive code and access
+global loading and failure handling. Route navigation is also abstracted and made easy to use and
+even switch navigation solutions if necessary.
 
-Uses **[Riverpod package](https://pub.dev/packages/riverpod)**.
+### Packages used:
+- [Riverpod](https://pub.dev/packages/riverpod)
+- [Freezed](https://pub.dev/packages/freezed)
+- [Beamer](https://pub.dev/packages/beamer)
+- [dartz](https://pub.dev/packages/dartz)
+- [Equatable](https://pub.dev/packages/equatable)
+- [Dart Code Metrics](https://pub.dev/packages/dart_code_metrics)
+- [build_runner](https://pub.dev/packages/build_runner)
+
+### Get started
+- Create your abstract repository and implement it
+```dart
+abstract class YourRepository {
+  EitherFailureOr<String> getYourString();
+}
+
+class YourRepositoryImplementation implements YourRepository {
+  @override
+  EitherFailureOr<String> getYourString() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (Random().nextBool()) {
+      return const Right('Your string');
+    } else {
+      return Left(Failure.generic());
+    }
+  }
+}
+```
+- Create your StateNotifier which extends BaseNotifier and add method to call your method
+  YourRepository.getYourString()
+```dart
+class YourStateNotifier
+    extends BaseStateNotifier<String, OtherState> {
+  final YourRepository _yourRepository;
+
+  YourStateNotifier(this._yourRepository, Reader reader) : super(reader);
+
+  Future getYourString() => execute(
+        _yourRepository.getYourString(),
+        withLoadingState: true,
+        globalLoading: false,
+        globalFailure: false,
+      );
+}
+```
+- Create provider for YourStateNotifier and instantiate your repository implementation
+```dart
+final yourNotifierProvider = StateNotifierProvider<YourStateNotifier,
+    BaseState<String, OtherState>>(
+      (ref) => YourStateNotifier(YourRepositoryImplementation(), ref.read),
+); 
+```
+- Call your provider from UI
+```dart
+class YourPage extends ConsumerWidget {
+  static const routeName = '/';
+
+  const YourPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(yourNotifierProvider);
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              state.when(
+                data: (sentence) => sentence,
+                loading: () => 'Loading',
+                other: (_) => 'Other',
+                initial: () => 'Initial',
+                error: (failure) => failure.toString(),
+              ),
+            ),
+            TextButton(
+              onPressed: ref.read(yourNotifierProvider.notifier).getYourString,
+              child: const Text('Get your string'),
+            ),
+            TextButton(
+              onPressed: () => ref.pushNamed(YourPage2.routeName),
+              child: const Text('Navigate to page 2'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+} 
+```
+That is all you need to get you started, to find out more, head over to the table of contents.
 
 ## Table of contents
 - [Real life example](#real-life-example)
