@@ -1,8 +1,11 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/data/example_repository.dart';
-import 'package:reusability/domain/notifiers/example_notifier/other_state_example.dart';
-import 'package:reusability/presentation/common/base_state.dart';
-import 'package:reusability/presentation/common/base_state_notifier.dart';
+
+import '../../../data/example_repository.dart';
+import '../../../domain/notifiers/example_notifier/other_state_example.dart';
+import '../../../presentation/common/base_state.dart';
+import '../../../presentation/common/base_state_notifier.dart';
 
 final exampleNotifierProvider = StateNotifierProvider<ExampleStateNotifier,
     BaseState<String, OtherStateExample>>(

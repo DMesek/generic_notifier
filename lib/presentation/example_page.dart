@@ -1,7 +1,11 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/domain/notifiers/example_notifier/example_state_notifier.dart';
 import 'package:reusability/presentation/common/navigation_extensions.dart';
+
+import 'common/navigation_extensions.dart';
 
 class ExamplePage extends ConsumerWidget {
   static const routeName = '/';

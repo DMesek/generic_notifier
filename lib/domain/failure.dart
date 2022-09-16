@@ -1,6 +1,9 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reusability/presentation/common/base_state_notifier.dart';
+
+import '../presentation/common/base_state_notifier.dart';
 
 /// Failure class that represents some kind of error that occurs in the app and being passed to UI
 class Failure extends Equatable {

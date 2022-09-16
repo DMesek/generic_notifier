@@ -1,9 +1,12 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/common/domain/router/base_router_provider.dart';
-import 'package:reusability/main/custom_provider_observer.dart';
-import 'package:reusability/presentation/common/base_widget.dart';
+
+import 'common/domain/router/base_router_provider.dart';
+import 'main/custom_provider_observer.dart';
+import 'presentation/common/base_widget.dart';
 
 void main() {
   runApp(ProviderScope(observers: [CustomProviderObserver()], child: const MyApp()));
