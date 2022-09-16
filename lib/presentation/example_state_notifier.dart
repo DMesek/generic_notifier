@@ -1,15 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/data/example_repository.dart';
-import 'package:reusability/presentation/common/base_state.dart';
-import 'package:reusability/presentation/common/base_state_notifier.dart';
+// ignore_for_file: always_use_package_imports
 
-final exampleNotifierProvider = StateNotifierProvider<ExampleStateNotifier,
-    BaseState<String, OtherStateExample>>(
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../data/example_repository.dart';
+import 'common/base_state.dart';
+import 'common/base_state_notifier.dart';
+
+final exampleNotifierProvider = StateNotifierProvider<ExampleStateNotifier, BaseState<String, OtherStateExample>>(
   (ref) => ExampleStateNotifier(SentenceRepository(), ref.read),
 );
 
-class ExampleStateNotifier
-    extends BaseStateNotifier<String, OtherStateExample> {
+class ExampleStateNotifier extends BaseStateNotifier<String, OtherStateExample> {
   final ExampleRepository _exampleRepository;
 
   ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);

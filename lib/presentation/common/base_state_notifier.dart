@@ -1,17 +1,18 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/domain/either_failure_or.dart';
-import 'package:reusability/domain/failure.dart';
-import 'package:reusability/domain/notifiers/global_failure_provider.dart';
-import 'package:reusability/domain/notifiers/global_loading_provider.dart';
-import 'package:reusability/presentation/common/base_loading_indicator.dart';
-import 'package:reusability/presentation/common/base_state.dart';
+
+import '../../domain/either_failure_or.dart';
+import '../../domain/failure.dart';
+import '../../domain/notifiers/global_failure_provider.dart';
+import '../../domain/notifiers/global_loading_provider.dart';
+import 'base_state.dart';
 
 typedef PreHandleData<T> = bool Function(T data);
 typedef PreHandleFailure = bool Function(Failure failure);
 
-abstract class BaseStateNotifier<DataState, OtherStates>
-    extends StateNotifier<BaseState<DataState, OtherStates>> {
+abstract class BaseStateNotifier<DataState, OtherStates> extends StateNotifier<BaseState<DataState, OtherStates>> {
   final Reader reader;
 
   BaseStateNotifier(this.reader) : super(const BaseState.initial());
@@ -48,17 +49,14 @@ abstract class BaseStateNotifier<DataState, OtherStates>
 
   ///Show [BaseLoadingIndicator] above the entire app
   @protected
-  void showGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => true);
+  void showGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => true);
 
   ///Clear [BaseLoadingIndicator]
   @protected
-  void clearGlobalLoading() =>
-      reader(globalLoadingProvider.notifier).update((state) => false);
+  void clearGlobalLoading() => reader(globalLoadingProvider.notifier).update((state) => false);
 
   @protected
-  void setGlobalFailure(Failure? failure) =>
-      reader(globalFailureProvider.notifier).update((state) => failure);
+  void setGlobalFailure(Failure? failure) => reader(globalFailureProvider.notifier).update((state) => failure);
 
   void _onFailure(
     Failure failure,
@@ -71,9 +69,7 @@ abstract class BaseStateNotifier<DataState, OtherStates>
       _unsetLoading(withLoadingState);
     }
     if (shouldProceedWithFailure) {
-      globalFailure
-          ? setGlobalFailure(failure)
-          : state = BaseState.error(failure);
+      globalFailure ? setGlobalFailure(failure) : state = BaseState.error(failure);
     }
   }
 

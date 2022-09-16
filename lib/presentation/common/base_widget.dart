@@ -1,14 +1,17 @@
+// ignore_for_file: always_use_package_imports
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/common/domain/router/base_router_provider.dart';
-import 'package:reusability/domain/failure.dart';
-import 'package:reusability/domain/notifiers/global_failure_provider.dart';
-import 'package:reusability/domain/notifiers/global_loading_provider.dart';
-import 'package:reusability/domain/notifiers/navigation_provider.dart';
-import 'package:reusability/domain/notifiers/route_action.dart';
-import 'package:reusability/presentation/common/base_loading_indicator.dart';
+
+import '../../common/domain/router/base_router_provider.dart';
+import '../../domain/failure.dart';
+import '../../domain/notifiers/global_failure_provider.dart';
+import '../../domain/notifiers/global_loading_provider.dart';
+import '../../domain/notifiers/navigation_provider.dart';
+import '../../domain/notifiers/route_action.dart';
+import 'base_loading_indicator.dart';
 
 class BaseWidget extends ConsumerWidget {
   final Widget child;

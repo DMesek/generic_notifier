@@ -1,5 +1,8 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/domain/failure.dart';
+
+import '../failure.dart';
 
 ///[globalFailureProvider] can be used to show the failure without updating [BaseStateNotifier] state.
 ///

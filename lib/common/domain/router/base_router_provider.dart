@@ -1,7 +1,10 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/common/domain/router/base_router.dart';
-import 'package:reusability/common/domain/router/beamer_locations.dart';
+
+import 'base_router.dart';
+import 'beamer_locations.dart';
 
 final baseRouterProvider = Provider<BaseRouter>((ref) {
   // final appRouter = AppRouter();

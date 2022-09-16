@@ -1,6 +1,9 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reusability/presentation/example_page.dart';
+
+import '../../../presentation/example_page.dart';
 
 class BeamerLocations extends BeamLocation<BeamState> {
   BeamerLocations(RouteInformation routeInformation) : super(routeInformation);

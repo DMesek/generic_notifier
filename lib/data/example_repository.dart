@@ -1,8 +1,11 @@
+// ignore_for_file: always_use_package_imports
+
 import 'dart:math';
 
 import 'package:dartz/dartz.dart';
-import 'package:reusability/domain/either_failure_or.dart';
-import 'package:reusability/domain/failure.dart';
+
+import '../domain/either_failure_or.dart';
+import '../domain/failure.dart';
 
 abstract class ExampleRepository {
   EitherFailureOr<String> getSomeString();
