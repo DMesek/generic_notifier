@@ -4,8 +4,6 @@ import 'package:reusability/domain/either_failure_or.dart';
 import 'package:reusability/domain/failure.dart';
 import 'package:reusability/domain/notifiers/global_failure_provider.dart';
 import 'package:reusability/domain/notifiers/global_loading_provider.dart';
-import 'package:reusability/domain/notifiers/navigation_provider.dart';
-import 'package:reusability/domain/notifiers/route_action.dart';
 import 'package:reusability/presentation/common/base_loading_indicator.dart';
 import 'package:reusability/presentation/common/base_state.dart';
 
@@ -47,21 +45,6 @@ abstract class BaseStateNotifier<DataState, OtherStates>
       (data) => _onData(data, onDataReceived, withLoadingState),
     );
   }
-
-  ///Calls [PushNamedAction] execute method. Route to new route with the given name
-  ///without the need to pass a context
-  void pushNamed(String routeName) => reader(globalNavigationProvider.notifier)
-      .update((_) => PushNamedAction(routeName));
-
-  ///Calls [RouteActionPushReplacement] execute method. Replace the route
-  ///without the need to pass a context
-  void pushReplacementNamed(String routeName) =>
-      reader(globalNavigationProvider.notifier)
-          .update((_) => PushReplacementNamedAction(routeName));
-
-  ///Calls [PopAction] execute method. Pop route without the need to pass a context
-  void pop() =>
-      reader(globalNavigationProvider.notifier).update((_) => PopAction());
 
   ///Show [BaseLoadingIndicator] above the entire app
   @protected
@@ -108,14 +91,14 @@ abstract class BaseStateNotifier<DataState, OtherStates>
 
   ///Shows global loading if [globalLoading] == true
   ///Set [withLoadingState] == true if you want to change [BaseStateNotifier] state to [BaseState.loading]
-  _setLoading(bool withLoadingState, bool globalLoading) {
+  void _setLoading(bool withLoadingState, bool globalLoading) {
     if (withLoadingState) state = const BaseState.loading();
     if (globalLoading) showGlobalLoading();
   }
 
   ///Clears global loading
   ///Set [withLoadingState] == true if you want to reset [BaseStateNotifier] state to [BaseState.initial]
-  _unsetLoading(bool withLoadingState) {
+  void _unsetLoading(bool withLoadingState) {
     if (withLoadingState) state = const BaseState.initial();
     clearGlobalLoading();
   }

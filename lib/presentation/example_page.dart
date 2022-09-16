@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/presentation/common/navigation_extensions.dart';
 import 'package:reusability/presentation/example_state_notifier.dart';
 
 class ExamplePage extends ConsumerWidget {
@@ -41,9 +42,7 @@ class ExamplePage extends ConsumerWidget {
               child: const Text('Get string'),
             ),
             TextButton(
-              onPressed: () => ref
-                  .read(exampleNotifierProvider.notifier)
-                  .pushNamed(ExamplePage2.routeName),
+              onPressed: () => ref.pushNamed(ExamplePage2.routeName),
               child: const Text('Navigate'),
             ),
           ],
@@ -73,13 +72,11 @@ class _ExamplePage2State extends ConsumerState<ExamplePage2>
         children: [
           ElevatedButton(
             // Within the SecondScreen widget
-            onPressed: ref.read(exampleNotifierProvider.notifier).pop,
+            onPressed: ref.pop,
             child: const Text('Go back!'),
           ),
           TextButton(
-            onPressed: () => ref
-                .read(exampleNotifierProvider.notifier)
-                .pushNamed(ExamplePage3.routeName),
+            onPressed: () => ref.pushNamed(ExamplePage3.routeName),
             child: const Text('Navigate'),
           ),
         ],
@@ -105,7 +102,7 @@ class ExamplePage3 extends ConsumerWidget {
             onPressed: () {
               // Navigate back to the first screen by popping the current route
               // off the stack.
-              ref.read(exampleNotifierProvider.notifier).pop();
+              ref.pop();
             },
             child: const Text('Go back!'),
           ),
