@@ -2,11 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/common/domain/router/base_router.dart';
 import 'package:reusability/domain/failure.dart';
 import 'package:reusability/domain/notifiers/global_failure_provider.dart';
 import 'package:reusability/domain/notifiers/navigation_provider.dart';
 import 'package:reusability/domain/notifiers/route_action.dart';
+
+import 'package:reusability/common/domain/router/base_router_provider.dart';
 
 extension WidgetRefExtension on WidgetRef {
   void globalFailureListener(BuildContext _) {
@@ -20,10 +21,10 @@ extension WidgetRefExtension on WidgetRef {
     });
   }
 
-  void globalNavigationListener(BaseRouter baseRouter) {
+  void globalNavigationListener() {
     listen<RouteAction?>(
       globalNavigationProvider,
-      (_, state) => state?.execute(baseRouter),
+      (_, state) => state?.execute(read(baseRouterProvider)),
     );
   }
 }

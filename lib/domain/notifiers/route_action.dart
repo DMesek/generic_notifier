@@ -8,21 +8,22 @@ abstract class RouteAction {
   void execute(BaseRouter baseRouter);
 }
 
-class RouteActionPushNamed extends RouteAction {
-  RouteActionPushNamed(super.routeName);
+class PushNamedAction extends RouteAction {
+  PushNamedAction(super.routeName);
 
   @override
   void execute(BaseRouter baseRouter) => baseRouter.pushNamed(routeName);
 }
 
-class RouteActionPop extends RouteAction {
+class PopAction extends RouteAction {
   @override
   void execute(BaseRouter baseRouter) => baseRouter.pop();
 }
 
-class RouteActionPushReplacementNamed extends RouteAction {
-  RouteActionPushReplacementNamed(super.routeName);
+class PushReplacementNamedAction extends RouteAction {
+  PushReplacementNamedAction(super.routeName);
 
   @override
-  void execute(BaseRouter baseRouter) => baseRouter.pushReplacementNamed(routeName);
+  void execute(BaseRouter baseRouter) =>
+      baseRouter.pushReplacementNamed(routeName);
 }

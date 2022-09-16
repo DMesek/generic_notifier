@@ -65,7 +65,8 @@ abstract class BaseRouter {
 // }
 
 class BeamerRouter extends BaseRouter {
-  BeamerRouter({required super.routerDelegate, required super.routeInformationParser});
+  BeamerRouter(
+      {required super.routerDelegate, required super.routeInformationParser});
 
   @override
   void pop() {

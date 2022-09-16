@@ -53,13 +53,19 @@ class ExamplePage extends ConsumerWidget {
   }
 }
 
-class ExamplePage2 extends ConsumerWidget {
+class ExamplePage2 extends ConsumerStatefulWidget {
   static const routeName = '/page2';
 
   const ExamplePage2({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ExamplePage2> createState() => _ExamplePage2State();
+}
+
+class _ExamplePage2State extends ConsumerState<ExamplePage2>
+    with SingleTickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
