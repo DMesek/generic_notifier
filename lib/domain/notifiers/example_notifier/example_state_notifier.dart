@@ -7,16 +7,14 @@ import '../../../domain/notifiers/example_notifier/other_state_example.dart';
 import '../../../presentation/common/base_state.dart';
 import '../../../presentation/common/base_state_notifier.dart';
 
-final exampleNotifierProvider = StateNotifierProvider<ExampleStateNotifier,
-    BaseState<String, OtherStateExample>>(
+final exampleNotifierProvider = StateNotifierProvider<ExampleStateNotifier, BaseState<String, OtherStateExample>>(
   (ref) => ExampleStateNotifier(SentenceRepository(), ref.read),
 );
 
-class ExampleStateNotifier
-    extends BaseStateNotifier<String, OtherStateExample> {
+class ExampleStateNotifier extends BaseStateNotifier<String, OtherStateExample> {
   final ExampleRepository _exampleRepository;
 
-  ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
+  ExampleStateNotifier(this._exampleRepository, super.reader);
 
   Future getSomeStringFullExample() => execute(
         //Function that is called. Needs to have the same success return type as State

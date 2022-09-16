@@ -32,14 +32,14 @@ class YourRepositoryImplementation implements YourRepository {
   }
 }
 ```
-- Create your StateNotifier which extends BaseNotifier and add method to call your method
-  YourRepository.getYourString()
+- Create your StateNotifier which extends BaseNotifier and add method to call your
+  YourRepository.getYourString() method
 ```dart
 class YourStateNotifier
     extends BaseStateNotifier<String, OtherState> {
   final YourRepository _yourRepository;
 
-  YourStateNotifier(this._yourRepository, Reader reader) : super(reader);
+  YourStateNotifier(this._yourRepository, super.reader);
 
   Future getYourString() => execute(
     _yourRepository.getYourString(),
@@ -80,8 +80,8 @@ That is all you need to get you started, to find out more, head over to the tabl
 - [Global failure](#global-failure)
 - [Navigation](#navigation)
 - [BaseWidget](#basewidget)
-- [Changes to switch to AutoRoute package](#changes-to-switch-to-autoroute-package)
-- [Changes to switch to GoRouter package](#changes-to-switch-to-go_router-package)
+- [Switch navigation package to AutoRoute package](#switch-navigation-package-to-autoroute-package)
+- [Switch navigation package to GoRouter package](#switch-navigation-package-to-go_router-package)
 
 ## Real life example
 
@@ -100,7 +100,7 @@ class ExampleStateNotifier
     extends BaseStateNotifier<String, OtherStateExample> {
   final ExampleRepository _exampleRepository;
 
-  ExampleStateNotifier(this._exampleRepository, Reader reader) : super(reader);
+  ExampleStateNotifier(this._exampleRepository, super.reader);
 
   Future getSomeStringFullExample() => execute(
     //Function that is called. Needs to have the same success return type as State
@@ -474,7 +474,7 @@ class BaseWidget extends ConsumerWidget {
 }
 ```
 
-## Changes to switch to AutoRoute package
+## Switch navigation package to AutoRoute package
 
 1. add auto_route dependency to pubspec.yaml
 2. create app_router.dart file, define AppRouter class with options defined in its documentation
@@ -502,7 +502,7 @@ class BaseWidget extends ConsumerWidget {
 
 &nbsp;
 
-## Changes to switch to go_router package:
+## Switch navigation package to go_router package:
 
 1. add go_router dependency to pubspec.yaml
 
