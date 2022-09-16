@@ -2,7 +2,7 @@
 
 Generic notifier which every notifier should extend to avoid writing repetitive code and access
 global loading and failure handling. Route navigation is also abstracted and made easy to use and
-even switch navigation solutions if necessary.
+even switch navigation packages if necessary.
 
 ### Packages used:
 - [Riverpod](https://pub.dev/packages/riverpod)
@@ -56,45 +56,17 @@ final yourNotifierProvider = StateNotifierProvider<YourStateNotifier,
       (ref) => YourStateNotifier(YourRepositoryImplementation(), ref.read),
 ); 
 ```
-- Call your provider from UI
-```dart
-class YourPage extends ConsumerWidget {
-  static const routeName = '/';
-
-  const YourPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+- In your widget call your provider and watch for the changes
+```
+    ref.read(yourNotifierProvider.notifier).getYourString();
     final state = ref.watch(yourNotifierProvider);
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              state.when(
-                data: (sentence) => sentence,
-                loading: () => 'Loading',
-                other: (_) => 'Other',
-                initial: () => 'Initial',
-                error: (failure) => failure.toString(),
-              ),
-            ),
-            TextButton(
-              onPressed: ref.read(yourNotifierProvider.notifier).getYourString,
-              child: const Text('Get your string'),
-            ),
-            TextButton(
-              onPressed: () => ref.pushNamed(YourPage2.routeName),
-              child: const Text('Navigate to page 2'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-} 
+    state.maybeWhen(
+      data: (yourString) => yourString,
+      loading: () => 'Loading',
+      initial: () => 'Initial',
+      error: (failure) => failure.toString(),
+      orElse: () => '',
+    ),
 ```
 That is all you need to get you started, to find out more, head over to the table of contents.
 
