@@ -7,6 +7,8 @@ Uses **[Riverpod package](https://pub.dev/packages/riverpod)**.
 
 ## Table of contents
 - [Real life example](#real-life-example)
+    - [ExampleStateNotifier](#examplestatenotifier)
+    - [ExamplePage](#examplepage)
 - [BaseState<State, OtherStates>](#basestatestate-otherstates)
 - [BaseStateNotifier](#basestatenotifier)
 - [Global loading](#global-loading)
