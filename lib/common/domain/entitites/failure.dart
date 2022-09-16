@@ -3,7 +3,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-import '../presentation/common/base_state_notifier.dart';
+import '../notifiers/base_state_notifier.dart';
 
 /// Failure class that represents some kind of error that occurs in the app and being passed to UI
 class Failure extends Equatable {

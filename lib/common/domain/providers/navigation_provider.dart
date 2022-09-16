@@ -2,7 +2,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'route_action.dart';
+import '../router/route_action.dart';
 
 final globalNavigationProvider = StateProvider.autoDispose<RouteAction?>(
   (_) => null,

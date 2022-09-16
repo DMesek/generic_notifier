@@ -3,8 +3,8 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'base_router.dart';
-import 'beamer_locations.dart';
+import '../router/base_router.dart';
+import '../router/beamer_locations.dart';
 
 final baseRouterProvider = Provider<BaseRouter>((ref) {
   // final appRouter = AppRouter();
@@ -44,7 +44,8 @@ final baseRouterProvider = Provider<BaseRouter>((ref) {
   return BeamerRouter(
     routerDelegate: BeamerDelegate(
       initialPath: '/',
-      locationBuilder: (routeInformation, _) => BeamerLocations(routeInformation),
+      locationBuilder: (routeInformation, _) =>
+          BeamerLocations(routeInformation),
     ),
     routeInformationParser: BeamerParser(),
   );

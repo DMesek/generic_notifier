@@ -5,12 +5,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../common/domain/router/base_router_provider.dart';
-import '../../domain/failure.dart';
-import '../../domain/notifiers/global_failure_provider.dart';
-import '../../domain/notifiers/global_loading_provider.dart';
-import '../../domain/notifiers/navigation_provider.dart';
-import '../../domain/notifiers/route_action.dart';
+import '../domain/providers/base_router_provider.dart';
+import '../domain/entitites/failure.dart';
+import '../domain/providers/global_failure_provider.dart';
+import '../domain/providers/global_loading_provider.dart';
+import '../domain/providers/navigation_provider.dart';
+import '../domain/router/route_action.dart';
 import 'base_loading_indicator.dart';
 
 class BaseWidget extends ConsumerWidget {

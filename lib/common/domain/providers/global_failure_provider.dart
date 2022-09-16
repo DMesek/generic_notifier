@@ -2,7 +2,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../failure.dart';
+import '../entitites/failure.dart';
 
 ///[globalFailureProvider] can be used to show the failure without updating [BaseStateNotifier] state.
 ///

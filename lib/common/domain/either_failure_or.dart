@@ -2,6 +2,6 @@
 
 import 'package:dartz/dartz.dart';
 
-import 'failure.dart';
+import 'entitites/failure.dart';
 
 typedef EitherFailureOr<T> = Future<Either<Failure, T>>;

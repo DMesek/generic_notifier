@@ -21,6 +21,28 @@ abstract class BaseRouter {
   void pushReplacementNamed(String routeName);
 }
 
+class BeamerRouter extends BaseRouter {
+  BeamerRouter({
+    required super.routerDelegate,
+    required super.routeInformationParser,
+  });
+
+  @override
+  void pop() {
+    (routerDelegate as BeamerDelegate).beamBack();
+  }
+
+  @override
+  void pushNamed(String routeName) {
+    (routerDelegate as BeamerDelegate).beamToNamed(routeName);
+  }
+
+  @override
+  void pushReplacementNamed(String routeName) {
+    (routerDelegate as BeamerDelegate).beamToReplacementNamed(routeName);
+  }
+}
+
 // class AppRouterRouter extends BaseRouter {
 //   AppRouterRouter({required super.routerDelegate, required super.routeInformationParser, super.router});
 //
@@ -63,25 +85,3 @@ abstract class BaseRouter {
 //     (router as GoRouter).replace(routeName);
 //   }
 // }
-
-class BeamerRouter extends BaseRouter {
-  BeamerRouter({
-    required super.routerDelegate,
-    required super.routeInformationParser,
-  });
-
-  @override
-  void pop() {
-    (routerDelegate as BeamerDelegate).beamBack();
-  }
-
-  @override
-  void pushNamed(String routeName) {
-    (routerDelegate as BeamerDelegate).beamToNamed(routeName);
-  }
-
-  @override
-  void pushReplacementNamed(String routeName) {
-    (routerDelegate as BeamerDelegate).beamToReplacementNamed(routeName);
-  }
-}

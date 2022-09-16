@@ -2,7 +2,7 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/failure.dart';
+import '../entitites/failure.dart';
 
 part 'base_state.freezed.dart';
 

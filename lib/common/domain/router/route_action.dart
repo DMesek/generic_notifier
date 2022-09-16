@@ -1,6 +1,6 @@
 // ignore_for_file: always_use_package_imports
 
-import '../../common/domain/router/base_router.dart';
+import 'base_router.dart';
 
 abstract class RouteAction {
   final String routeName;
@@ -26,5 +26,6 @@ class PushReplacementNamedAction extends RouteAction {
   PushReplacementNamedAction(super.routeName);
 
   @override
-  void execute(BaseRouter baseRouter) => baseRouter.pushReplacementNamed(routeName);
+  void execute(BaseRouter baseRouter) =>
+      baseRouter.pushReplacementNamed(routeName);
 }
