@@ -2,13 +2,12 @@
 
 import 'dart:developer';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/features/connectivity/utils/connectivity_extensions.dart';
 
 import '../domain/entitites/failure.dart';
 import '../domain/providers/base_router_provider.dart';
-import '../domain/providers/connectivity_provider.dart';
 import '../domain/providers/global_failure_provider.dart';
 import '../domain/providers/global_loading_provider.dart';
 import '../domain/providers/navigation_provider.dart';
@@ -54,20 +53,6 @@ extension _WidgetRefExtensions on WidgetRef {
     listen<RouteAction?>(
       globalNavigationProvider,
       (_, state) => state?.execute(read(baseRouterProvider)),
-    );
-  }
-
-  void globalConnectivityListener(BuildContext _) {
-    listen<ConnectivityResult?>(
-      connectivityProvider,
-      (previous, current) {
-        if (current == ConnectivityResult.none && previous != null) {
-          log('no connection');
-        } else if (previous == ConnectivityResult.none &&
-            (current == ConnectivityResult.mobile || current == ConnectivityResult.wifi)) {
-          log('connection is back');
-        }
-      },
     );
   }
 }

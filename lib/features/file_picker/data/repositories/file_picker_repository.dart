@@ -3,9 +3,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/common/domain/either_failure_or.dart';
 
-import '../entitites/failure.dart';
+import '../../../../common/domain/entitites/failure.dart';
+
+final filePickerRepositoryProvider = Provider<IFilePickerRepository>(
+  (ref) => FilePickerRepository(FilePicker.platform),
+);
 
 class FilePickerRepository implements IFilePickerRepository {
   final FilePicker _filePicker;
@@ -28,11 +33,10 @@ class FilePickerRepository implements IFilePickerRepository {
       );
       return Right(result);
     } catch (error, stackTrace) {
-      String title = 'File picker error';
-      if (error is PlatformException && error.message != null) {
-        title = error.message ?? '';
+      if (error is PlatformException && error.code == 'read_external_storage_denied') {
+        return Left(Failure.permissionDenied(error: error, stackTrace: stackTrace));
       }
-      return Left(Failure.generic(title: title, error: error, stackTrace: stackTrace));
+      return Left(Failure.generic(title: 'File picker error', error: error, stackTrace: stackTrace));
     }
   }
 
