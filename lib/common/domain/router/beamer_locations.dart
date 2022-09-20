@@ -2,6 +2,7 @@
 
 import 'package:beamer/beamer.dart';
 import 'package:flutter/widgets.dart';
+import 'package:reusability/example/presentation/pages/local_storage_example_page.dart';
 
 import '../../../example/presentation/pages/example_page.dart';
 
@@ -13,6 +14,7 @@ class BeamerLocations extends BeamLocation<BeamState> {
         ExamplePage.routeName,
         ExamplePage2.routeName,
         ExamplePage3.routeName,
+        LocalStorageExamplePage.routeName,
       ];
 
   @override
@@ -34,6 +36,12 @@ class BeamerLocations extends BeamLocation<BeamState> {
           key: ValueKey('examplePage3'),
           title: 'ExamplePage3',
           child: ExamplePage3(),
+        ),
+      if (state.uri.pathSegments.contains('local_storage'))
+        const BeamPage(
+          key: ValueKey(LocalStorageExamplePage.routeName),
+          title: 'ExamplePage3',
+          child: LocalStorageExamplePage(),
         ),
     ];
   }

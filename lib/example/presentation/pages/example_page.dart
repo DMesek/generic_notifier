@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusability/example/presentation/pages/local_storage_example_page.dart';
 
-import '../../domain/notifiers/example_notifier/example_state_notifier.dart';
 import '../../../common/domain/router/navigation_extensions.dart';
+import '../../domain/notifiers/example_notifier/example_state_notifier.dart';
 
 class ExamplePage extends ConsumerWidget {
   static const routeName = '/';
@@ -108,6 +109,10 @@ class ExamplePage3 extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          TextButton(
+            onPressed: () => ref.pushNamed(LocalStorageExamplePage.routeName),
+            child: const Text('Navigate to local storage example'),
+          ),
           ElevatedButton(
             // Within the SecondScreen widget
             onPressed: () {
