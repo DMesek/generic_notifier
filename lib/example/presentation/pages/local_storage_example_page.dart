@@ -27,13 +27,17 @@ class _LocalStorageExamplePageState extends ConsumerState<LocalStorageExamplePag
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: () => ref.read(localStorageProvider).storeToken('Token 1').then((value) {
+              onPressed: () => ref
+                  .read(localStorageProvider)
+                  .write(key: LocalStorageKey.token, value: 'Token 1')
+                  .then((value) {
                 setState(() {});
               }),
               child: const Text('Store token'),
             ),
             FutureBuilder<String?>(
-              future: ref.read(localStorageProvider).token,
+              future:
+                  ref.read(localStorageProvider).read(LocalStorageKey.token),
               builder: (context, snapshot) {
                 final data = snapshot.data;
                 if (data != null) {
@@ -41,7 +45,10 @@ class _LocalStorageExamplePageState extends ConsumerState<LocalStorageExamplePag
                     children: [
                       Text(data),
                       TextButton(
-                        onPressed: () => ref.read(localStorageProvider).deleteToken().then((value) {
+                        onPressed: () => ref
+                            .read(localStorageProvider)
+                            .delete(LocalStorageKey.token)
+                            .then((value) {
                           setState(() {});
                         }),
                         child: const Text('Delete token'),
@@ -53,13 +60,18 @@ class _LocalStorageExamplePageState extends ConsumerState<LocalStorageExamplePag
               },
             ),
             TextButton(
-              onPressed: () => ref.read(localStorageProvider).storePassword('Password 1').then((value) {
+              onPressed: () => ref
+                  .read(localStorageProvider)
+                  .writeSecure(key: LocalStorageKey.password, value: 'Password')
+                  .then((value) {
                 setState(() {});
               }),
               child: const Text('Store password'),
             ),
             FutureBuilder<String?>(
-              future: ref.read(localStorageProvider).password,
+              future: ref
+                  .read(localStorageProvider)
+                  .readSecure(LocalStorageKey.password),
               builder: (context, snapshot) {
                 final data = snapshot.data;
                 if (data != null) {
@@ -67,7 +79,10 @@ class _LocalStorageExamplePageState extends ConsumerState<LocalStorageExamplePag
                     children: [
                       Text(data),
                       TextButton(
-                        onPressed: () => ref.read(localStorageProvider).deletePassword().then((value) {
+                        onPressed: () => ref
+                            .read(localStorageProvider)
+                            .deleteSecure(LocalStorageKey.password)
+                            .then((value) {
                           setState(() {});
                         }),
                         child: const Text('Delete password'),
@@ -77,6 +92,13 @@ class _LocalStorageExamplePageState extends ConsumerState<LocalStorageExamplePag
                 }
                 return const SizedBox();
               },
+            ),
+            TextButton(
+              onPressed: () =>
+                  ref.read(localStorageProvider).deleteAll().then((value) {
+                setState(() {});
+              }),
+              child: const Text('Delete all'),
             ),
           ],
         ),

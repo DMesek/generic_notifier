@@ -10,19 +10,29 @@ final localStorageProvider = Provider<LocalStorageRepository>(
 );
 
 abstract class LocalStorageRepository {
-  ///Use shared preferences for storing non sensitive data
-  Future<String?> get token;
+  Future write({
+    required LocalStorageKey key,
+    required String value,
+  });
 
-  Future storeToken(String token);
+  Future writeSecure({
+    required LocalStorageKey key,
+    required String value,
+  });
 
-  Future deleteToken();
+  Future<T?> read<T>(LocalStorageKey key);
 
-  ///Use secure storage for storing sensitive data
-  Future<String?> get password;
+  Future<String?> readSecure(LocalStorageKey key);
 
-  Future storePassword(String token);
+  Future delete(LocalStorageKey key);
 
-  Future deletePassword();
+  Future deleteSecure(LocalStorageKey key);
+
+  Future deleteAllSharedPrefs();
+
+  Future deleteAllSecure();
+
+  Future deleteAll();
 }
 
 class LocalStorageRepositoryImpl implements LocalStorageRepository {
@@ -40,27 +50,56 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
   }
 
   @override
-  Future<String?> get token async => (await _sharedPrefs).getString(_tokenKey);
-
-  @override
-  Future storeToken(String token) async =>
-      (await _sharedPrefs).setString(_tokenKey, token);
-
-  @override
-  Future deleteToken() async => (await _sharedPrefs).remove(_tokenKey);
-
-  @override
-  Future<String?> get password async => _secureStorage.read(key: _passwordKey);
-
-  @override
-  Future storePassword(String password) async {
-    await _secureStorage.write(key: _passwordKey, value: password);
+  Future write({
+    required LocalStorageKey key,
+    required String value,
+  }) async {
+    (await _sharedPrefs).setString(key.key, value);
   }
 
   @override
-  Future deletePassword() async =>
-      await _secureStorage.delete(key: _passwordKey);
+  Future writeSecure({
+    required LocalStorageKey key,
+    required String value,
+  }) async {
+    await _secureStorage.write(key: key.key, value: value);
+  }
+
+  @override
+  Future<T?> read<T>(LocalStorageKey key) async =>
+      (await _sharedPrefs).get(key.key) as T?;
+
+  @override
+  Future<String?> readSecure(LocalStorageKey key) async =>
+      _secureStorage.read(key: key.key);
+
+  @override
+  Future delete(LocalStorageKey key) async =>
+      (await _sharedPrefs).remove(key.key);
+
+  @override
+  Future deleteSecure(LocalStorageKey key) async =>
+      await _secureStorage.delete(key: key.key);
+
+  @override
+  Future deleteAllSharedPrefs() async => (await _sharedPrefs).clear();
+
+  @override
+  Future deleteAllSecure() async => await _secureStorage.deleteAll();
+
+  @override
+  Future deleteAll() async {
+    await Future.wait([
+      deleteAllSharedPrefs(),
+      deleteAllSecure(),
+    ]);
+  }
 }
 
-const _tokenKey = 'token';
-const _passwordKey = 'password';
+enum LocalStorageKey {
+  token('token'),
+  password('password');
+
+  final String key;
+  const LocalStorageKey(this.key);
+}

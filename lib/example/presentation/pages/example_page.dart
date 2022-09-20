@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../common/domain/router/navigation_extensions.dart';
-import '../../../features/firebase_messaging/domain/utils/firebase_messaging_extensions.dart';
 import '../../domain/notifiers/example_notifier/example_state_notifier.dart';
 import 'local_storage_example_page.dart';
 
@@ -16,7 +15,6 @@ class ExamplePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(exampleNotifierProvider);
-    ref.firebaseMessagingNotificationListener(context);
     return Scaffold(
       body: Center(
         child: Column(
