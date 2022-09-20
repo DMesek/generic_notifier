@@ -93,6 +93,13 @@ class _LocalStorageExamplePageState
                 return const SizedBox();
               },
             ),
+            TextButton(
+              onPressed: () =>
+                  ref.read(localStorageProvider).deleteAll().then((value) {
+                setState(() {});
+              }),
+              child: const Text('Delete all'),
+            ),
           ],
         ),
       ),
