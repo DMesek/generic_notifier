@@ -29,14 +29,15 @@ class _LocalStorageExamplePageState
             TextButton(
               onPressed: () => ref
                   .read(localStorageProvider)
-                  .storeToken('Token 1')
+                  .write(key: LocalStorageKey.token, value: 'Token 1')
                   .then((value) {
                 setState(() {});
               }),
               child: const Text('Store token'),
             ),
             FutureBuilder<String?>(
-              future: ref.read(localStorageProvider).token,
+              future:
+                  ref.read(localStorageProvider).read(LocalStorageKey.token),
               builder: (context, snapshot) {
                 final data = snapshot.data;
                 if (data != null) {
@@ -46,7 +47,7 @@ class _LocalStorageExamplePageState
                       TextButton(
                         onPressed: () => ref
                             .read(localStorageProvider)
-                            .deleteToken()
+                            .delete(LocalStorageKey.token)
                             .then((value) {
                           setState(() {});
                         }),
@@ -61,14 +62,16 @@ class _LocalStorageExamplePageState
             TextButton(
               onPressed: () => ref
                   .read(localStorageProvider)
-                  .storePassword('Password 1')
+                  .writeSecure(key: LocalStorageKey.password, value: 'Password')
                   .then((value) {
                 setState(() {});
               }),
               child: const Text('Store password'),
             ),
             FutureBuilder<String?>(
-              future: ref.read(localStorageProvider).password,
+              future: ref
+                  .read(localStorageProvider)
+                  .readSecure(LocalStorageKey.password),
               builder: (context, snapshot) {
                 final data = snapshot.data;
                 if (data != null) {
@@ -78,7 +81,7 @@ class _LocalStorageExamplePageState
                       TextButton(
                         onPressed: () => ref
                             .read(localStorageProvider)
-                            .deletePassword()
+                            .deleteSecure(LocalStorageKey.password)
                             .then((value) {
                           setState(() {});
                         }),
