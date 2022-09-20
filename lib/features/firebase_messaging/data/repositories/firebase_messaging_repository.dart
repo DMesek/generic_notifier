@@ -94,7 +94,9 @@ enum NotificationStartedType { onLaunch, onMessage, onResume }
 /// add google-services.json to android/app/ directory,
 /// add "classpath 'com.google.gms:google-services:<latest_version>'" to android/build.gradle file
 /// and add "apply plugin: 'com.google.gms.google-services'" to android/app/build.gradle file
-
+///
 /// To finish iOS setup create iOS app on Firebase console, add auth key or push notification certificate from developer.apple.com to it,
 /// add PushNotification capability in Xcode (ios/Runner/Runner.entitlements file) and
 /// add GoogleService-Info.plist file to ios/Runner directory
+///
+/// For both platforms, add Firebase.initializeApp() in main.dart
