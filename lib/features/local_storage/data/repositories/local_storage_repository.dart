@@ -49,9 +49,6 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
     return _sharedPreferencesInstance ??= await _sharedPreferencesFuture;
   }
 
-  // @override
-  // Future<String?> get token async => (await _sharedPrefs).getString(_tokenKey);
-
   @override
   Future write({
     required LocalStorageKey key,
@@ -86,6 +83,7 @@ class LocalStorageRepositoryImpl implements LocalStorageRepository {
 
   @override
   Future deleteAllSharedPrefs() async => (await _sharedPrefs).clear();
+
   @override
   Future deleteAllSecure() async => await _secureStorage.deleteAll();
 
