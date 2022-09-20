@@ -4,8 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/common/domain/either_failure_or.dart';
 
+import '../../../../common/domain/either_failure_or.dart';
 import '../../../../common/domain/entitites/failure.dart';
 
 final filePickerRepositoryProvider = Provider<IFilePickerRepository>(

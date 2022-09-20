@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/example/presentation/pages/example_page.dart';
-import 'package:reusability/features/local_storage/data/repositories/local_storage_repository.dart';
+
+import '../../../features/local_storage/data/repositories/local_storage_repository.dart';
+import 'example_page.dart';
 
 class LocalStorageExamplePage extends ConsumerStatefulWidget {
   static const routeName = '${ExamplePage3.routeName}/local_storage';
@@ -16,8 +17,7 @@ class LocalStorageExamplePage extends ConsumerStatefulWidget {
   ConsumerState createState() => _LocalStorageExamplePageState();
 }
 
-class _LocalStorageExamplePageState
-    extends ConsumerState<LocalStorageExamplePage> {
+class _LocalStorageExamplePageState extends ConsumerState<LocalStorageExamplePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,10 +27,7 @@ class _LocalStorageExamplePageState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: () => ref
-                  .read(localStorageProvider)
-                  .storeToken('Token 1')
-                  .then((value) {
+              onPressed: () => ref.read(localStorageProvider).storeToken('Token 1').then((value) {
                 setState(() {});
               }),
               child: const Text('Store token'),
@@ -44,10 +41,7 @@ class _LocalStorageExamplePageState
                     children: [
                       Text(data),
                       TextButton(
-                        onPressed: () => ref
-                            .read(localStorageProvider)
-                            .deleteToken()
-                            .then((value) {
+                        onPressed: () => ref.read(localStorageProvider).deleteToken().then((value) {
                           setState(() {});
                         }),
                         child: const Text('Delete token'),
@@ -59,10 +53,7 @@ class _LocalStorageExamplePageState
               },
             ),
             TextButton(
-              onPressed: () => ref
-                  .read(localStorageProvider)
-                  .storePassword('Password 1')
-                  .then((value) {
+              onPressed: () => ref.read(localStorageProvider).storePassword('Password 1').then((value) {
                 setState(() {});
               }),
               child: const Text('Store password'),
@@ -76,10 +67,7 @@ class _LocalStorageExamplePageState
                     children: [
                       Text(data),
                       TextButton(
-                        onPressed: () => ref
-                            .read(localStorageProvider)
-                            .deletePassword()
-                            .then((value) {
+                        onPressed: () => ref.read(localStorageProvider).deletePassword().then((value) {
                           setState(() {});
                         }),
                         child: const Text('Delete password'),

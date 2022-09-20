@@ -2,9 +2,9 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/common/domain/either_failure_or.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../common/domain/either_failure_or.dart';
 import '../../../../common/domain/entitites/failure.dart';
 
 final urlLauncherRepositoryProvider = Provider<IUrlLauncherRepository>(

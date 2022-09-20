@@ -23,6 +23,7 @@ dependencies:
   url_launcher: ^6.1.5
   flutter_secure_storage: ^6.0.0
   shared_preferences: ^2.0.15
+  firebase_messaging: ^13.0.2
 
 dev_dependencies:
   build_runner: ^2.2.1

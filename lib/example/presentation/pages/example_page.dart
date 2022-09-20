@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/example/presentation/pages/local_storage_example_page.dart';
 
 import '../../../common/domain/router/navigation_extensions.dart';
+import '../../../features/firebase_messaging/domain/utils/firebase_messaging_extensions.dart';
 import '../../domain/notifiers/example_notifier/example_state_notifier.dart';
+import 'local_storage_example_page.dart';
 
 class ExamplePage extends ConsumerWidget {
   static const routeName = '/';
@@ -15,6 +16,7 @@ class ExamplePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(exampleNotifierProvider);
+    ref.firebaseMessagingNotificationListener(context);
     return Scaffold(
       body: Center(
         child: Column(
@@ -35,21 +37,15 @@ class ExamplePage extends ConsumerWidget {
               ),
             ),
             TextButton(
-              onPressed: ref
-                  .read(exampleNotifierProvider.notifier)
-                  .getSomeStringWithOtherState,
+              onPressed: ref.read(exampleNotifierProvider.notifier).getSomeStringWithOtherState,
               child: const Text('Other state example'),
             ),
             TextButton(
-              onPressed: ref
-                  .read(exampleNotifierProvider.notifier)
-                  .getSomeStringFullExample,
+              onPressed: ref.read(exampleNotifierProvider.notifier).getSomeStringFullExample,
               child: const Text('Get string'),
             ),
             TextButton(
-              onPressed: ref
-                  .read(exampleNotifierProvider.notifier)
-                  .getSomeStringGlobalLoading,
+              onPressed: ref.read(exampleNotifierProvider.notifier).getSomeStringGlobalLoading,
               child: const Text('Global loading example'),
             ),
             //Navigation example
@@ -73,8 +69,7 @@ class ExamplePage2 extends ConsumerStatefulWidget {
   ConsumerState<ExamplePage2> createState() => _ExamplePage2State();
 }
 
-class _ExamplePage2State extends ConsumerState<ExamplePage2>
-    with SingleTickerProviderStateMixin {
+class _ExamplePage2State extends ConsumerState<ExamplePage2> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

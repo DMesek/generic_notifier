@@ -119,8 +119,6 @@ dart_code_metrics:
         break-on: 4
         severity: style
 
-    - avoid-non-null-assertion:
-        severity: warning
     - avoid-throw-in-catch-block:
         severity: warning
     - avoid-unused-parameters:

@@ -8,7 +8,8 @@ import 'common/domain/providers/base_router_provider.dart';
 import 'common/presentation/base_widget.dart';
 import 'common/utils/custom_provider_observer.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(ProviderScope(
     observers: [CustomProviderObserver()],
     child: const MyApp(),

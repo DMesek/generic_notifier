@@ -2,9 +2,9 @@
 
 import 'package:beamer/beamer.dart';
 import 'package:flutter/widgets.dart';
-import 'package:reusability/example/presentation/pages/local_storage_example_page.dart';
 
 import '../../../example/presentation/pages/example_page.dart';
+import '../../../example/presentation/pages/local_storage_example_page.dart';
 
 class BeamerLocations extends BeamLocation<BeamState> {
   BeamerLocations(RouteInformation routeInformation) : super(routeInformation);
