@@ -4,7 +4,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reusability/features/connectivity/utils/connectivity_extensions.dart';
 
 import '../domain/entities/failure.dart';
 import '../domain/providers/base_router_provider.dart';
@@ -29,7 +28,6 @@ class BaseWidget extends ConsumerWidget {
     //final navigatorContext = ref.watch(baseRouterProvider).navigatorContext;
     ref.globalFailureListener();
     ref.globalNavigationListener();
-    ref.globalConnectivityListener();
     final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
       children: [
