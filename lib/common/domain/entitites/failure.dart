@@ -61,21 +61,6 @@ class Failure extends Equatable {
         uniqueKey: uniqueKey,
       );
 
-  factory Failure.noBiometricsAvailable({
-    String? title,
-    bool isCritical = false,
-    dynamic error,
-    StackTrace? stackTrace,
-    UniqueKey? uniqueKey,
-  }) =>
-      Failure._(
-        title: title ?? 'No biometrics available',
-        isCritical: isCritical,
-        error: error,
-        stackTrace: stackTrace,
-        uniqueKey: uniqueKey,
-      );
-
   Failure copyWith({
     String? title,
     bool? isCritical,

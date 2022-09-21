@@ -56,7 +56,7 @@ class LocalAuthRepositoryImpl implements LocalAuthRepository {
   EitherFailureOr<BiometricType> getAvailableBiometricType() async {
     final availableBiometrics = await LocalAuthentication().getAvailableBiometrics();
     if (availableBiometrics.isEmpty) {
-      return Left(Failure.noBiometricsAvailable());
+      return Left(Failure.generic(title: 'No biometrics available'));
     } else if (availableBiometrics.contains(BiometricType.face)) {
       return const Right(BiometricType.face);
     } else if (availableBiometrics.contains(BiometricType.iris)) {
