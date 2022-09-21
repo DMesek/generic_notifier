@@ -44,8 +44,7 @@ final baseRouterProvider = Provider<BaseRouter>((ref) {
   return BeamerRouter(
     routerDelegate: BeamerDelegate(
       initialPath: '/',
-      locationBuilder: (routeInformation, _) =>
-          BeamerLocations(routeInformation),
+      locationBuilder: (routeInformation, _) => BeamerLocations(routeInformation),
     ),
     routeInformationParser: BeamerParser(),
   );

@@ -224,7 +224,7 @@ packages:
       name: dart_code_metrics
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.18.3"
+    version: "4.19.0"
   dart_style:
     dependency: transitive
     description:
@@ -617,7 +617,7 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.0.0"
+    version: "10.0.1"
   permission_handler_android:
     dependency: transitive
     description:

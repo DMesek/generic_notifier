@@ -14,6 +14,8 @@ abstract class BaseRouter {
     this.router,
   });
 
+  BuildContext? get navigatorContext;
+
   void pushNamed(String routeName);
 
   void pop();
@@ -26,6 +28,9 @@ class BeamerRouter extends BaseRouter {
     required super.routerDelegate,
     required super.routeInformationParser,
   });
+
+  @override
+  BuildContext? get navigatorContext => (routerDelegate as BeamerDelegate).navigator.context;
 
   @override
   void pop() {
@@ -47,6 +52,9 @@ class BeamerRouter extends BaseRouter {
 //   AppRouterRouter({required super.routerDelegate, required super.routeInformationParser, super.router});
 //
 //   @override
+//   BuildContext? get navigatorContext => (router as AppRouter).navigatorKey.currentContext;
+//
+//   @override
 //   void pop() {
 //     (router as AppRouter).pop();
 //   }
@@ -61,7 +69,7 @@ class BeamerRouter extends BaseRouter {
 //     (router as AppRouter).replaceNamed(routeName);
 //   }
 // }
-//
+
 // class GoRouterRouter extends BaseRouter {
 //   GoRouterRouter({
 //     required super.routerDelegate,
@@ -69,6 +77,9 @@ class BeamerRouter extends BaseRouter {
 //     super.routeInformationProvider,
 //     super.router,
 //   });
+//
+//   @override
+//   BuildContext? get navigatorContext => (router as GoRouter).navigator?.context;
 //
 //   @override
 //   void pop() {
