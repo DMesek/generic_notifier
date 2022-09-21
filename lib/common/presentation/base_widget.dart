@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusability/features/connectivity/utils/connectivity_extensions.dart';
 
-import '../domain/entitites/failure.dart';
+import '../domain/entities/failure.dart';
 import '../domain/providers/base_router_provider.dart';
 import '../domain/providers/global_failure_provider.dart';
 import '../domain/providers/global_loading_provider.dart';

@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:dartz/dartz.dart';
 
 import '../../../common/domain/either_failure_or.dart';
-import '../../../common/domain/entitites/failure.dart';
+import '../../../common/domain/entities/failure.dart';
 
 abstract class ExampleRepository {
   EitherFailureOr<String> getSomeString();

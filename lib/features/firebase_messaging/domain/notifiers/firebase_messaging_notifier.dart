@@ -1,13 +1,10 @@
-// ignore_for_file: always_use_package_imports
-
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../common/domain/notifiers/base_state.dart';
-import '../../../../common/domain/notifiers/base_state_notifier.dart';
-import '../../data/entities/firebase_messaging_notification.dart';
-import '../../data/repositories/firebase_messaging_repository.dart';
+import 'package:reusability/common/domain/notifiers/base_state.dart';
+import 'package:reusability/common/domain/notifiers/base_state_notifier.dart';
+import 'package:reusability/features/firebase_messaging/data/entities/firebase_messaging_notification.dart';
+import 'package:reusability/features/firebase_messaging/data/repositories/firebase_messaging_repository.dart';
 
 final firebaseMessagingNotifier =
     StateNotifierProvider<FirebaseMessagingNotifier, BaseState<FirebaseMessagingNotification, void>>(

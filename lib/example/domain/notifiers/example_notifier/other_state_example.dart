@@ -2,7 +2,8 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../common/domain/entitites/failure.dart';
+import '../../../../common/domain/entities/failure.dart';
+
 part 'other_state_example.freezed.dart';
 
 @freezed

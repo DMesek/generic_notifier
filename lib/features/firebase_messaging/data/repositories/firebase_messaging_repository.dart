@@ -1,5 +1,3 @@
-// ignore_for_file: always_use_package_imports
-
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
@@ -7,10 +5,9 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../common/domain/either_failure_or.dart';
-import '../../../../common/domain/entitites/failure.dart';
-import '../entities/firebase_messaging_notification.dart';
+import 'package:reusability/common/domain/either_failure_or.dart';
+import 'package:reusability/common/domain/entities/failure.dart';
+import 'package:reusability/features/firebase_messaging/data/entities/firebase_messaging_notification.dart';
 
 final firebaseMessagingRepositoryProvider = Provider<FirebaseMessagingRepository>(
   (ref) => FirebaseMessagingRepositoryImpl(),

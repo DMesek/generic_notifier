@@ -1,14 +1,12 @@
-// ignore_for_file: always_use_package_imports, depend_on_referenced_packages
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/error_codes.dart';
 import 'package:local_auth/local_auth.dart';
+// ignore: depend_on_referenced_packages
 import 'package:local_auth_android/local_auth_android.dart';
-
-import '../../../../common/domain/either_failure_or.dart';
-import '../../../../common/domain/entitites/failure.dart';
+import 'package:reusability/common/domain/either_failure_or.dart';
+import 'package:reusability/common/domain/entities/failure.dart';
 
 final localAuthRepositoryProvider =
     Provider<LocalAuthRepository>((ref) => LocalAuthRepositoryImpl(LocalAuthentication()));

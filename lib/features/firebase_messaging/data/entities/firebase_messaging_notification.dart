@@ -1,9 +1,6 @@
-// ignore_for_file: always_use_package_imports
-
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import '../repositories/firebase_messaging_repository.dart';
+import 'package:reusability/features/firebase_messaging/data/repositories/firebase_messaging_repository.dart';
 
 class FirebaseMessagingNotification extends Equatable {
   final RemoteMessage remoteMessage;
