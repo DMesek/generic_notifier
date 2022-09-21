@@ -21,7 +21,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final baseRouter = ref.read(baseRouterProvider);
+    final baseRouter = ref.watch(baseRouterProvider);
     return BeamerProvider(
       routerDelegate: baseRouter.routerDelegate as BeamerDelegate,
       child: MaterialApp.router(
