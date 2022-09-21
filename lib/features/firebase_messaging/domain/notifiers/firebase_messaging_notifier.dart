@@ -11,7 +11,7 @@ import '../../data/repositories/firebase_messaging_repository.dart';
 
 final firebaseMessagingNotifier =
     StateNotifierProvider<FirebaseMessagingNotifier, BaseState<FirebaseMessagingNotification, void>>(
-  (ref) => FirebaseMessagingNotifier(ref.read(firebaseMessagingRepositoryProvider), ref.read),
+  (ref) => FirebaseMessagingNotifier(ref.watch(firebaseMessagingRepositoryProvider), ref.read),
 );
 
 class FirebaseMessagingNotifier extends BaseStateNotifier<FirebaseMessagingNotification, void> {
