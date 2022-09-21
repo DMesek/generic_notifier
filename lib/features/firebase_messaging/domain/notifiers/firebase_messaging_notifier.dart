@@ -15,7 +15,7 @@ final firebaseMessagingNotifier =
 );
 
 class FirebaseMessagingNotifier extends BaseStateNotifier<FirebaseMessagingNotification, void> {
-  final IFirebaseMessagingRepository _firebaseMessagingRepository;
+  final FirebaseMessagingRepository _firebaseMessagingRepository;
 
   FirebaseMessagingNotifier(this._firebaseMessagingRepository, super.reader) {
     _init();

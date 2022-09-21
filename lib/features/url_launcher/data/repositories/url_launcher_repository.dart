@@ -7,11 +7,26 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../common/domain/either_failure_or.dart';
 import '../../../../common/domain/entitites/failure.dart';
 
-final urlLauncherRepositoryProvider = Provider<IUrlLauncherRepository>(
-  (ref) => UrlLauncherRepository(),
+final urlLauncherRepositoryProvider = Provider<UrlLauncherRepository>(
+  (ref) => UrlLauncherRepositoryImpl(),
 );
 
-class UrlLauncherRepository implements IUrlLauncherRepository {
+abstract class UrlLauncherRepository {
+  EitherFailureOr<bool> openUrl({
+    Uri? url,
+    String? urlString,
+    LaunchMode mode = LaunchMode.platformDefault,
+    WebViewConfiguration webViewConfiguration = const WebViewConfiguration(),
+    String? webOnlyWindowName,
+  });
+
+  EitherFailureOr<bool> canOpenUrl({
+    Uri? url,
+    String? urlString,
+  });
+}
+
+class UrlLauncherRepositoryImpl implements UrlLauncherRepository {
   @override
   EitherFailureOr<bool> openUrl({
     Uri? url,
@@ -57,19 +72,4 @@ class UrlLauncherRepository implements IUrlLauncherRepository {
     }
     return Left(Failure.generic());
   }
-}
-
-abstract class IUrlLauncherRepository {
-  EitherFailureOr<bool> openUrl({
-    Uri? url,
-    String? urlString,
-    LaunchMode mode = LaunchMode.platformDefault,
-    WebViewConfiguration webViewConfiguration = const WebViewConfiguration(),
-    String? webOnlyWindowName,
-  });
-
-  EitherFailureOr<bool> canOpenUrl({
-    Uri? url,
-    String? urlString,
-  });
 }

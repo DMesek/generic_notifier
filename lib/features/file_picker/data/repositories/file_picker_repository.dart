@@ -8,14 +8,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../common/domain/either_failure_or.dart';
 import '../../../../common/domain/entitites/failure.dart';
 
-final filePickerRepositoryProvider = Provider<IFilePickerRepository>(
-  (ref) => FilePickerRepository(FilePicker.platform),
+final filePickerRepositoryProvider = Provider<FilePickerRepository>(
+  (ref) => FilePickerRepositoryImpl(FilePicker.platform),
 );
 
-class FilePickerRepository implements IFilePickerRepository {
+abstract class FilePickerRepository {
+  EitherFailureOr<FilePickerResult?> pickFiles({
+    FileType type = FileType.any,
+    List<String> allowedExtensions,
+    bool allowCompression = true,
+    bool allowMultiple = false,
+  });
+  EitherFailureOr<bool?> clearTemporaryFiles();
+}
+
+class FilePickerRepositoryImpl implements FilePickerRepository {
   final FilePicker _filePicker;
 
-  const FilePickerRepository(this._filePicker);
+  const FilePickerRepositoryImpl(this._filePicker);
 
   @override
   EitherFailureOr<FilePickerResult?> pickFiles({
@@ -42,15 +52,4 @@ class FilePickerRepository implements IFilePickerRepository {
 
   @override
   EitherFailureOr<bool?> clearTemporaryFiles() async => Right(await _filePicker.clearTemporaryFiles());
-}
-
-abstract class IFilePickerRepository {
-  EitherFailureOr<FilePickerResult?> pickFiles({
-    FileType type = FileType.any,
-    List<String> allowedExtensions,
-    bool allowCompression = true,
-    bool allowMultiple = false,
-  });
-
-  EitherFailureOr<bool?> clearTemporaryFiles();
 }

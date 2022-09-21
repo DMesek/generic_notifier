@@ -12,11 +12,23 @@ import '../../../../common/domain/either_failure_or.dart';
 import '../../../../common/domain/entitites/failure.dart';
 import '../entities/firebase_messaging_notification.dart';
 
-final firebaseMessagingRepositoryProvider = Provider<IFirebaseMessagingRepository>(
-  (ref) => FirebaseMessagingRepository(),
+final firebaseMessagingRepositoryProvider = Provider<FirebaseMessagingRepository>(
+  (ref) => FirebaseMessagingRepositoryImpl(),
 );
 
-class FirebaseMessagingRepository implements IFirebaseMessagingRepository {
+abstract class FirebaseMessagingRepository {
+  EitherFailureOr<Unit> init();
+
+  Stream<FirebaseMessagingNotification> listenForNotifications();
+
+  Stream<String> onTokenRefresh();
+
+  EitherFailureOr<String?> getToken();
+
+  void close();
+}
+
+class FirebaseMessagingRepositoryImpl implements FirebaseMessagingRepository {
   StreamController<FirebaseMessagingNotification>? _notificationStream;
 
   @override
@@ -74,18 +86,6 @@ class FirebaseMessagingRepository implements IFirebaseMessagingRepository {
     _notificationStream
         ?.add(FirebaseMessagingNotification(remoteMessage: message, notificationStartedType: notificationStartedType));
   }
-}
-
-abstract class IFirebaseMessagingRepository {
-  EitherFailureOr<Unit> init();
-
-  Stream<FirebaseMessagingNotification> listenForNotifications();
-
-  Stream<String> onTokenRefresh();
-
-  EitherFailureOr<String?> getToken();
-
-  void close();
 }
 
 enum NotificationStartedType { onLaunch, onMessage, onResume }

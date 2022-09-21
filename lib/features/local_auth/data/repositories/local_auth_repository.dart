@@ -10,12 +10,23 @@ import 'package:local_auth_android/local_auth_android.dart';
 import '../../../../common/domain/either_failure_or.dart';
 import '../../../../common/domain/entitites/failure.dart';
 
-final localAuthRepositoryProvider = Provider<ILocalAuthRepository>((ref) => LocalAuthRepository(LocalAuthentication()));
+final localAuthRepositoryProvider =
+    Provider<LocalAuthRepository>((ref) => LocalAuthRepositoryImpl(LocalAuthentication()));
 
-class LocalAuthRepository implements ILocalAuthRepository {
+abstract class LocalAuthRepository {
+  EitherFailureOr<BiometricType> getAvailableBiometricType();
+
+  EitherFailureOr<bool> authenticate({
+    required String localizedReason,
+    List<AuthMessages>? authMessages,
+    AuthenticationOptions? options,
+  });
+}
+
+class LocalAuthRepositoryImpl implements LocalAuthRepository {
   final LocalAuthentication _localAuthentication;
 
-  const LocalAuthRepository(this._localAuthentication);
+  const LocalAuthRepositoryImpl(this._localAuthentication);
 
   @override
   EitherFailureOr<bool> authenticate({
@@ -53,16 +64,6 @@ class LocalAuthRepository implements ILocalAuthRepository {
     }
     return const Right(BiometricType.fingerprint);
   }
-}
-
-abstract class ILocalAuthRepository {
-  EitherFailureOr<BiometricType> getAvailableBiometricType();
-
-  EitherFailureOr<bool> authenticate({
-    required String localizedReason,
-    List<AuthMessages>? authMessages,
-    AuthenticationOptions? options,
-  });
 }
 
 /// To finish Android setup you need to add permission to your AndroidManifest.xml file
