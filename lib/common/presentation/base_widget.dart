@@ -23,9 +23,9 @@ class BaseWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // if you need context to showDialog or bottomSheet, use this one because main context won't work as BaseWidget is
-    // the first widget in builder method of MaterialApp.router so Navigator is not ready yet
-    //final navigatorContext = ref.watch(baseRouterProvider).navigatorContext;
+    // if you need context to showDialog or bottomSheet, use BaseRouter's navigatorContext because main context
+    // won't work as BaseWidget is the first widget in builder method of MaterialApp.router so Navigator is not ready yet
+    // final navigatorContext = ref.watch(baseRouterProvider).navigatorContext;
     ref.globalFailureListener();
     ref.globalNavigationListener();
     final showLoading = ref.watch(globalLoadingProvider);

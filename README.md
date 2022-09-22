@@ -371,7 +371,7 @@ final globalFailureProvider = StateProvider<Failure?>((_) => null);
 ### Global failure listener
 
 ```dart
-void globalFailureListener(BuildContext _) {
+void globalFailureListener() {
   listen<Failure?>(globalFailureProvider, (_, failure) {
     if (failure == null) return;
     //Show global error
@@ -465,7 +465,10 @@ class BaseWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.globalFailureListener(context);
+    // if you need context to showDialog or bottomSheet, use BaseRouter's navigatorContext because main context 
+    // won't work as BaseWidget is the first widget in builder method of MaterialApp.router so Navigator is not ready yet
+    // final navigatorContext = ref.watch(baseRouterProvider).navigatorContext;
+    ref.globalFailureListener();
     ref.globalNavigationListener();
     final showLoading = ref.watch(globalLoadingProvider);
     return Stack(
